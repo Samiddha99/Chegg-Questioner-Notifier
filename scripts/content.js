@@ -158,7 +158,7 @@ function notifyQuestion(){
                     console.log(title);
                     if(NotificationEnabled){
                         sent_notification = new Notification(title, {
-                            'body': "Chegg Expert Q&A page showing some message. Kindly go the page.",
+                            'body': "Chegg Expert Q&A page showing some message. Kindly go to the page.",
                             'tag': 'chegg_question_live',
                             'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
                             'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
