@@ -1,4 +1,5 @@
 var alert_sound;
+var notification_test = 'chegg_question_live'
 function playAlertSound(){
     try{
         alert_sound.pause()
@@ -9,10 +10,6 @@ function playAlertSound(){
             chrome.storage.sync.get(['AlertSoundVolume'], function (result1) {
                 let AlertSoundVolume = result1.AlertSoundVolume;
                 AlertSound = result.AlertSound['url'];
-                try{
-                    alert_sound.pause()
-                }
-                catch{}
                 try{
                     console.log(`playing sound ${AlertSound}`)
                     // audio_file = chrome.runtime.getURL("assets/audio/audio-1.mp3")
@@ -225,18 +222,53 @@ window.addEventListener("load", function() {
     });
 
     $("#test-notification-btn").on('click', function(){
-        let title = `!!TEST NOTIFICATION!!\nHURRAY! New Question in Chegg!`;
-        sent_notification = new Notification(title, {
-            'body': "A Question available in your Chegg Live Expert Q&A Dashbord.",
-            'tag': 'chegg_question_live',
-            'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
-            'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
-            'image': chrome.runtime.getURL("assets/images/notification_image.png"),
-            'vibrate': [2000],
-            'renotify': true,
-            'requireInteraction': true,
-            'silent': false
-        });
+        if(notification_test == 'chegg_question_live'){
+            notification_test = 'chegg_user_inactive';
+            let title = `!!TEST NOTIFICATION!!\nHURRAY! New Question in Chegg!`;
+            sent_notification = new Notification(title, {
+                'body': "A Question available in your Chegg Live Expert Q&A Dashbord.",
+                'tag': 'test_notification',
+                'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
+                'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
+                'image': chrome.runtime.getURL("assets/images/notification_image.png"),
+                'vibrate': [2000],
+                'renotify': true,
+                'requireInteraction': true,
+                'silent': false
+            });
+        }
+        else{
+            notification_test = 'chegg_question_live';
+            chrome.storage.sync.get(['LastSubmission', 'InactiveAlert'], function(result){
+                var title = '';
+                var body = ''
+                if (result.LastSubmission) {
+                    let current = new Date();
+                    let diff = ((current - result.LastSubmission)/1000)/3600;
+                    if(diff >= 48){
+                        title = '!!TEST NOTIFICATION!!\nALERT! You are inactive in Chegg Live Expert Q&A'
+                        body = `Recently you've not solved any question in Chegg Expert Q&A.\nYou've last solved question at ${formatDateTime(result.LastSubmission)}.`
+                    }
+                }
+                else{
+                    title = '!!TEST NOTIFICATION!!\nALERT! No question solved in Chegg Live Expert Q&A'
+                    body = `You've not solved any question in Chegg Expert Q&A`
+                }
+                if(title != '' && body != ''){
+                    sent_notification = new Notification(title, {
+                        'body': body,
+                        'tag': 'test_notification',
+                        'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
+                        'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
+                        'image': chrome.runtime.getURL("assets/images/notification_image.png"),
+                        'vibrate': [2000],
+                        'renotify': true,
+                        'requireInteraction': false,
+                        'silent': false
+                    });
+                } 
+            });
+        }
     });
 });
   

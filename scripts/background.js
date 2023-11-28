@@ -77,12 +77,12 @@ setInterval(function(){
                 let current = new Date();
                 let diff = ((current - result.LastSubmission)/1000)/3600;
                 if(diff >= 48){
-                    title = 'You are inactive in Chegg Live Expert Q&A'
+                    title = 'ALERT!!\nYou are inactive in Chegg Live Expert Q&A'
                     body = `Recently you've not solved any question in Chegg Expert Q&A.\nYou've last solved question at ${formatDateTime(result.LastSubmission)}.`
                 }
             }
             else{
-                title = 'No question solved in Chegg Live Expert Q&A'
+                title = 'ALERT!!\nNo question solved in Chegg Live Expert Q&A'
                 body = `You've not solved any question in Chegg Expert Q&A`
             }
             if(title != '' && body != ''){
