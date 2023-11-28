@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chegg Questioner Notifier</title>
+        <link href="/scripts/bootstrap/bootstrap.css" rel="stylesheet">
+        <script src="/scripts/jquery/jquery.js"></script>
+        <script src="/scripts/font-awesome/fontawesome-6.4.2.js"></script>
+        <style>
+            body{
+                padding: 10px;
+                background-color:rgb(255, 203, 166);
+            }
+            .container{
+                width: 100%;
+                max-width: 500px;
+                min-height: 500px;
+                background-color: white;
+                padding: 10px;
+                border-radius: 10px;
+                box-shadow: 0px 0px 7px 3px rgb(161, 161, 161);
+                /* position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -60%); */
+            }
+            .heading{
+                text-align: center;
+                font-size: 30px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .heading-about{
+                font-size: 14px;
+                color: gray;
+                text-align: center;
+                /* margin-bottom: 20px; */
+            }
+            .footer{
+                margin-top: 20px;
+                padding: 5px 0px 0px 0px;
+                border-top: 1px solid rgb(183, 183, 183);
+                text-align: center;
+                font-size: 15px;
+            }
+            .footer a{
+                text-decoration: none !important;
+            }
+            .div-form-switch{
+                margin-top: 12px;
+            }
+            .form-check-input{
+                outline: none !important;
+                border: none !important;
+                box-shadow: 0px 0px 1px 1px #a4a4a4 !important;
+                background-position: left center;
+                --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23bfbfbf'/%3e%3c/svg%3e") !important;
+            }
+            .form-check-input:focus{
+                box-shadow: 0px 0px 1px 2px #fd7f26 !important;
+                background-position: left center;
+                --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23faa76b'/%3e%3c/svg%3e") !important;
+            }
+            .form-check-input:checked{
+                box-shadow: 0px 0px 1px 1px #fd7f26 !important;
+                background-color: #feaf76;
+                background-position: right center !important;
+                --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+            }
+            .input-info{
+                margin-top: 0px;
+                font-size: 12px;
+                color: gray;
+            }
+            .form-control{
+                border: 1px solid #a4a4a4 !important;
+                outline: none !important;
+            }
+            .form-control:focus{
+                border: 1px solid #fd5c26 !important;
+                box-shadow: 0px 0px 2px 0px #fd7f26 !important;
+            }
+            .input-group-text:has(~ .form-control){
+                border: 1px solid #6c757d;
+            }
+            .input-group-text:has(~ .form-control:focus){
+                border: 1px solid #fd5c26;
+                background-color: #feaf76;
+            }
+            .refresh_interval-btn, .alert_sound-btn-toggle, .alert_sound-btn, .alert_audio_volume-test-btn, .test-notification-btn{
+                background-color: #f8f9fa;
+                border: 1px solid #6c757d;
+            }
+            .refresh_interval-btn:hover, .alert_sound-btn-toggle:hover, .alert_sound-btn-toggle:focus, .alert_sound-btn:hover, .alert_audio_volume-test-btn:hover, .test-notification-btn:hover, #alert_audio_volume-test:checked + .alert_audio_volume-test-btn{
+                border: 1px solid #fd5c26 !important;
+                background-color: #feaf76 !important;
+            }
+            .alert_sound-btn{
+                border-radius: 0px 5px 5px 0px !important;
+            }
+            .alert_sound-dropdown-item.selected{
+                background-color: #f9c6a1;
+            }
+            .form-control:disabled{
+                background-color: white;
+            }
+
+            /* === range theme and appearance === */
+            input[type="range"] {
+                font-size: 1.5rem;
+                width: 100%;
+                position: relative;
+                background: transparent;
+                overflow: hidden;
+                color: #fd5c26;
+                --thumb-height: 1.375em;
+                --thumb-width: 0.5em;
+                --track-height: 0.125em;
+                --track-color: rgba(0, 0, 0, 0.2);
+                --brightness-hover: 180%;
+                --brightness-down: 80%;
+                --clip-edges: 0.0125em;
+                --track-color: rgb(204, 204, 204);
+                cursor: grabbing;
+            }
+            input[type="range"]:disabled {
+                filter: grayscale(1);
+                opacity: 0.3;
+                cursor: not-allowed;
+            }
+            /* === WebKit specific styles === */
+            input[type="range"],
+            input[type="range"]::-webkit-slider-runnable-track,
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                transition: all ease 100ms;
+                height: var(--thumb-height);
+            }
+            input[type="range"]::-webkit-slider-runnable-track,
+            input[type="range"]::-webkit-slider-thumb {
+                position: relative;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+                --thumb-radius: calc((var(--thumb-height) * 0.5) - 1px);
+                --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
+                --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
+                --clip-further: calc(100% + 1px);
+                --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
+                    100vmax currentColor;
+
+                width: var(--thumb-width, var(--thumb-height));
+                background: linear-gradient(currentColor 0 0) scroll no-repeat left center /
+                    50% calc(var(--track-height) + 1px);
+                background-color: currentColor;
+                box-shadow: var(--box-fill);
+                border-radius: var(--thumb-width, var(--thumb-height));
+
+                filter: brightness(100%);
+                clip-path: polygon(
+                    100% -1px,
+                    var(--clip-edges) -1px,
+                    0 var(--clip-top),
+                    -100vmax var(--clip-top),
+                    -100vmax var(--clip-bottom),
+                    0 var(--clip-bottom),
+                    var(--clip-edges) 100%,
+                    var(--clip-further) var(--clip-further)
+                );
+            }
+            input[type="range"]:hover::-webkit-slider-thumb {
+                filter: brightness(var(--brightness-hover));
+                cursor: grab;
+            }
+            input[type="range"]:active::-webkit-slider-thumb {
+                filter: brightness(var(--brightness-down));
+                cursor: grabbing;
+            }
+            input[type="range"]::-webkit-slider-runnable-track {
+                background: linear-gradient(var(--track-color) 0 0) scroll no-repeat center /
+                    100% calc(var(--track-height) + 1px);
+            }
+            input[type="range"]:disabled::-webkit-slider-thumb {
+                cursor: not-allowed;
+            }
+            /* === Firefox specific styles === */
+            input[type="range"],
+            input[type="range"]::-moz-range-track,
+            input[type="range"]::-moz-range-thumb {
+                appearance: none;
+                transition: all ease 100ms;
+                height: var(--thumb-height);
+            }
+            input[type="range"]::-moz-range-track,
+            input[type="range"]::-moz-range-thumb,
+            input[type="range"]::-moz-range-progress {
+                background: #fff0;
+            }
+            input[type="range"]::-moz-range-thumb {
+                background: currentColor;
+                border: 0;
+                width: var(--thumb-width, var(--thumb-height));
+                border-radius: var(--thumb-width, var(--thumb-height));
+                cursor: grab;
+            }
+            input[type="range"]:active::-moz-range-thumb {
+                cursor: grabbing;
+            }
+            input[type="range"]::-moz-range-track {
+                width: 100%;
+                background: var(--track-color);
+            }
+            input[type="range"]::-moz-range-progress {
+                appearance: none;
+                background: currentColor;
+                transition-delay: 30ms;
+            }
+            input[type="range"]::-moz-range-track,
+            input[type="range"]::-moz-range-progress {
+                height: calc(var(--track-height) + 1px);
+                border-radius: var(--track-height);
+            }
+            input[type="range"]::-moz-range-thumb,
+            input[type="range"]::-moz-range-progress {
+                filter: brightness(100%);
+            }
+            input[type="range"]:hover::-moz-range-thumb,
+            input[type="range"]:hover::-moz-range-progress {
+                filter: brightness(var(--brightness-hover));
+            }
+            input[type="range"]:active::-moz-range-thumb,
+            input[type="range"]:active::-moz-range-progress {
+                filter: brightness(var(--brightness-down));
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="heading">
+                <div class="row g-0 align-items-center">
+                    <div class="col-auto text-end">
+                        <div class="text-end justify-content-end">
+                            <img src="/assets/icons/icon128.png" style="height: 50px; width: 50px;"/>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div>Chegg Questioner Notifier</div>
+                    </div>
+                </div>
+            </div>
+            <div class="heading-about">
+                Why will you refresh the page every time to get question in your Chegg live Q&A.
+                <br>Use this extension to get notification when a questions comes in your Chegg Live Expert QnA Dashbord.
+            </div>
+            <hr>
+
+            <div class="input-group mb-2">
+                <button class="btn dropdown-toggle alert_sound-btn-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Alert Sound</button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item alert_sound-dropdown-item" data-value="audio-1">Audio 1</a></li>
+                  <li><a class="dropdown-item alert_sound-dropdown-item" data-value="audio-2">Audio 2</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item alert_sound-dropdown-item" data-value="audio-custom">Custom Audio</a></li>
+                </ul>
+                <input type="text" class="form-control" id="alert_sound-input" placeholder="Enter link of the audio" disabled>
+                <button class="btn alert_sound-btn" type="button" id="alert_sound-btn" disabled>Set</button>
+                <div class="input-info" id="alert_sound-info">Selected sound will be play as Alert Sound. The alert sound plays when question is available in your Chegg Live Expert Q&A.</div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col">
+                    <label for="alert_audio_volume" class="form-label">Alert Sound Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value='0' id="alert_audio_volume" style="margin-top:-10px !important;">
+                </div>
+                <div class="col-auto text-end mt-4">
+                    <input type="checkbox" class="btn-check" id="alert_audio_volume-test" autocomplete="off">
+                    <label class="btn alert_audio_volume-test-btn" for="alert_audio_volume-test" style="margin-top: 10px;">Test Sound</label>
+                </div>
+            </div>
+          
+            <div class="row g-2">
+                <div class="col">
+                    <div class="div-form-input mb-3">
+                        <div class="input-group mb-0">
+                            <span class="input-group-text" id="basic-addon1">Refresh Interval</span>
+                            <input type="number" min="5" class="form-control" id="refresh_interval" placeholder="In Second" aria-label="refresh" aria-describedby="basic-addon1">
+                            <button class="btn refresh_interval-btn" type="button" id="refresh_interval-btn">Set</button>
+                          </div>
+                          <div class="input-info" id="refresh_interval-info">Expert Q&A page will reload at every <span id="refresh_interval-text"></span> seconds to fetch question if available.</div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn test-notification-btn" id="test-notification-btn">Test Notification</button>
+                </div>
+            </div>
+            
+            <div class="div-form-switch">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="notification_enabled">
+                    <label class="form-check-label" for="notification_enabled" id="notification_enabled-label"></label>
+                </div>
+                <div class="input-info" id="notification_enabled-info"></div>
+            </div>
+            <div class="div-form-switch">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="alertsound_enabled">
+                    <label class="form-check-label" for="alertsound_enabled" id="alertsound_enabled-label"></label>
+                </div>
+                <div class="input-info" id="alertsound_enabled-info"></div>
+            </div>
+            <div class="div-form-switch">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="inactive_alert_enabled">
+                    <label class="form-check-label" for="inactive_alert_enabled" id="inactive_alert_enabled-label"></label>
+                </div>
+                <div class="input-info" id="inactive_alert_enabled-info"></div>
+            </div>
+            <div class="div-form-switch">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="extension_enabled">
+                    <label class="form-check-label" for="extension_enabled" id="extension_enabled-label"></label>
+                </div>
+                <div class="input-info" id="extension_enabled-info"></div>
+            </div>
+
+            <div class="footer">
+                Developed by <a href="https://rebrand.ly/samiddha" target="_blank">Samiddha Chakrabarti</a>
+            </div>
+        </div>
+
+        <script src="/scripts/bootstrap/bootstrap.js"></script>
+        <script src="/scripts/options.js"></script>
+    </body>
+</html>

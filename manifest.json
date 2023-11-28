@@ -1,0 +1,59 @@
+{
+  "manifest_version": 3,
+  "name": "Chegg Questioner Notifier",
+  "version": "1.0",
+  "description": "Get notification when an questions comes in your Chegg Live Expert QnA Dashbord.",
+  "author": {
+    "name": "Samiddha Chakrabarti",
+    "email": "user@example.com"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "alarms",
+    "background",
+    "cookies",
+    "notifications",
+    "pageCapture",
+    "storage",
+    "system.memory",
+    "system.storage",
+    "nativeMessaging",
+    "activeTab",
+    "tabs",
+    "tabCapture"
+  ],
+  "action": {
+    "default_title": "Click to open setting for Chegg Questioner Notifier",
+    "default_popup": "popup.html"
+  },
+   "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://expert.chegg.com/*"],
+      "js": ["scripts/content.js"]
+    }
+  ],
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "scripts/jquery/jquery.js",
+        "assets/images/notification_badge.png",
+        "assets/images/notification_icon.webp",
+        "assets/images/notification_image.png",
+        "assets/audio/audio-1.mp3",
+        "assets/audio/audio-2.mp3"
+    ],
+      "matches": [ "https://expert.chegg.com/*" ]
+    }
+  ],
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  }
+}

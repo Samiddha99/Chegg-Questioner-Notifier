@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chegg Questioner Notifier</title>
+        <link href="/scripts/bootstrap/bootstrap.css" rel="stylesheet">
+        <script src="/scripts/jquery/jquery.js"></script>
+        <script src="/scripts/font-awesome/fontawesome-6.4.2.js"></script>
+        <style>
+            body{
+                width: 350px;
+                padding: 8px;
+                border: 5px solid rgb(251, 114, 16);
+            }
+            .container{
+                background-color: white;
+                border: 3px dashed #fd8128;
+                padding: 10px;
+            }
+            .heading{
+                font-size: 19px;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            .heading-about{
+                font-size: 13px;
+                color: gray;
+            }
+            .qna-link{
+                text-align: center;
+            }
+            .qna-link a{
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 15px;
+                color: rgb(249, 58, 134);
+            }
+            .qna-link a:hover{
+                color: rgb(246, 82, 175);
+            }
+            .footer{
+                margin-top: 20px;
+                padding: 5px 0px 0px 0px;
+                border-top: 1px solid rgb(183, 183, 183);
+                text-align: center;
+                font-size: 15px;
+            }
+            .footer a{
+                text-decoration: none !important;
+            }
+            .div-form-switch{
+                margin-top: 12px;
+            }
+            .form-check-input{
+                outline: none !important;
+                border: none !important;
+                box-shadow: 0px 0px 1px 1px #a4a4a4 !important;
+                background-position: left center;
+                --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23bfbfbf'/%3e%3c/svg%3e") !important;
+            }
+            .form-check-input:focus{
+                box-shadow: 0px 0px 1px 2px #fd7f26 !important;
+                background-position: left center;
+                --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23faa76b'/%3e%3c/svg%3e") !important;
+            }
+            .form-check-input:checked{
+                box-shadow: 0px 0px 1px 1px #fd7f26 !important;
+                background-color: #feaf76;
+                background-position: right center !important;
+                --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+            }
+            .input-info{
+                margin-top: 0px;
+                font-size: 12px;
+                color: gray;
+            }
+            .form-control{
+                border: 1px solid #a4a4a4 !important;
+                outline: none !important;
+            }
+            .form-control:focus{
+                border: 1px solid #fd5c26 !important;
+                box-shadow: 0px 0px 2px 0px #fd7f26 !important;
+            }
+            .input-group-text:has(~ .form-control:focus){
+                background-color: #feaf76;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="heading">
+                <div class="row g-1 align-items-center">
+                    <div class="col-auto">
+                        <img src="/assets/icons/icon32.png"/>
+                    </div>
+                    <div class="col">
+                        <div>Chegg Questioner Notifier</div>
+                    </div>
+                </div>
+            </div>
+            <div class="heading-about">
+                Why will you refresh the page every time to get question in your Chegg live Q&A.
+                <br>Use this extension to get notification when a questions comes in your Chegg Live Expert QnA Dashbord.
+                <div class="qna-link">
+                    <a href="https://expert.chegg.com/qna/authoring/answer" target="_blank">Go to Chegg Expert Q&A</a>
+                </div>
+            </div>
+            <hr>
+            <div class="div-form-input mb-3">
+                <div class="input-group mb-0">
+                    <span class="input-group-text" id="basic-addon1">Refresh Interval</span>
+                    <input type="number" min="5" class="form-control" id="refresh_interval" placeholder="In Second" aria-label="refresh" aria-describedby="basic-addon1">
+                    <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon1">Set</button> -->
+                  </div>
+                  <div class="input-info" id="refresh_interval-info">Expert Q&A page will reload at every <span id="refresh_interval-text"></span> seconds to fetch question if available.</div>
+            </div>
+            <div class="div-form-switch">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="notification_enabled">
+                    <label class="form-check-label" for="notification_enabled" id="notification_enabled-label"></label>
+                </div>
+                <div class="input-info" id="notification_enabled-info"></div>
+            </div>
+            <div class="div-form-switch">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="alertsound_enabled">
+                    <label class="form-check-label" for="alertsound_enabled" id="alertsound_enabled-label"></label>
+                </div>
+                <div class="input-info" id="alertsound_enabled-info"></div>
+            </div>
+            <div class="div-form-switch">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="extension_enabled">
+                    <label class="form-check-label" for="extension_enabled" id="extension_enabled-label"></label>
+                </div>
+                <div class="input-info" id="extension_enabled-info"></div>
+            </div>
+
+            <div class="footer">
+                Developed by <a href="https://rebrand.ly/samiddha" target="_blank">Samiddha Chakrabarti</a>
+            </div>
+        </div>
+
+        <script src="/scripts/bootstrap/bootstrap.js"></script>
+        <script src="/scripts/popup.js"></script>
+    </body>
+</html>
