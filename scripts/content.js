@@ -89,10 +89,12 @@ function notifyQuestion(){
                     location.reload();
                 }
             }
-            if(location.href == qna_url && content_loads.length >= 1){
+            else if(location.href == qna_url && content_loads.length >= 1){
                 let no_question_div = document.querySelectorAll('[data-test="no-question"]')[0];
-                let alert_msg = document.getElementById('chegg_questioner_notifier_msg');
-                if(!alert_msg){
+                let question_div = document.querySelectorAll('[data-test="question"]');
+                let error_notification = document.querySelectorAll('[data-test="notification"][type="error"]');
+                let extension_alert_msg = document.getElementById('chegg_questioner_notifier_msg');
+                if(!extension_alert_msg && no_question_div){
                     try{
                         let msg = `<div style="text-align:center;">
                             <h4 id="chegg_questioner_notifier_msg" style="color:red;">Chegg Question Notifier is Activated.</h4>
@@ -101,71 +103,18 @@ function notifyQuestion(){
                         </div>`;
                         no_question_div.insertAdjacentHTML("afterbegin", msg);
                     }
-                    catch{
-
-                    }
+                    catch{}
                 }
-                else{
-                    refresh_timer -= 1;
-                    document.getElementById("refresh_timer").innerHTML = refresh_timer;
-                }
-            }
+                refresh_timer -= 1;
+                document.getElementById("refresh_timer").innerHTML = refresh_timer;
             
-            let no_question_div = document.querySelectorAll('[data-test="no-question"]');
-            let question_div = document.querySelectorAll('[data-test="question"]');
-            let error_notification = document.querySelectorAll('[data-test="notification"][type="error"]');
-            if(question_div.length >= 1){
-                question_fetched = true;
-                refresh_timer = refreshInterval;
-                // other_notified = false;
-                if(!question_notified){
-                    let title = `HURRAY!\nNew Question in Chegg!`;
-                    console.log(title)
-                    try{
-                        // alert_sound.pause();
-                    }
-                    catch{}
-                    try{
-                        sent_notification.close();
-                    }
-                    catch{}
-                    if(AlertSoundEnabled){
-                        try{
-                            // audio_file = chrome.runtime.getURL("assets/audio/audio-1.mp3")
-                            alert_sound = new Audio(AlertSound);
-                            alert_sound.volume = AlertSoundVolume;
-                            alert_sound.loop = true;
-                            alert_sound.play();
-                        }
-                        catch{}
-                    }
-                    if(NotificationEnabled){
-                        sent_notification = new Notification(title, {
-                            'body': "A Question available in your Chegg Live Expert Q&A Dashbord.",
-                            'tag': 'chegg_question_live',
-                            'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
-                            'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
-                            'image': chrome.runtime.getURL("assets/images/notification_image.png"),
-                            'vibrate': [2000],
-                            'renotify': true,
-                            'requireInteraction': true,
-                            'silent': false
-                        });
-                    }
-                }
-                question_notified = true;
-            }
-            else if((no_question_div.length >= 1 && refresh_timer <= 0) || (force_reload1 && force_reload2)){
-                // Refresh the page 
-                location.reload();
-            }
-            else if(error_notification.length >= 1 && !question_fetched && refresh_timer <= refreshInterval/2){
-                // Refresh the page 
-                location.reload();
-            }
-            else if(refresh_timer == 0 && !question_fetched){
-                if(!other_notified){
-                    chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
+                if(question_div.length >= 1){
+                    question_fetched = true;
+                    refresh_timer = refreshInterval;
+                    // other_notified = false;
+                    if(!question_notified){
+                        let title = `HURRAY!\nNew Question in Chegg!`;
+                        console.log(title)
                         try{
                             // alert_sound.pause();
                         }
@@ -174,36 +123,82 @@ function notifyQuestion(){
                             sent_notification.close();
                         }
                         catch{}
-                        try{
-                            audio_file = chrome.runtime.getURL("assets/audio/other_notification.mp3")
-                            alert_sound1 = new Audio(audio_file);
-                            // alert_sound1.volume = AlertSoundVolume;
-                            // alert_sound1.loop = true;
-                            alert_sound1.play();
+                        if(AlertSoundEnabled){
+                            try{
+                                // audio_file = chrome.runtime.getURL("assets/audio/audio-1.mp3")
+                                alert_sound = new Audio(AlertSound);
+                                alert_sound.volume = AlertSoundVolume;
+                                alert_sound.loop = true;
+                                alert_sound.play();
+                            }
+                            catch{}
                         }
-                        catch{}
-                        let title = `ALERT!!\nSometing other displayed in Chegg Expert Q&A Page.`;
-                        console.log(title);
                         if(NotificationEnabled){
                             sent_notification = new Notification(title, {
-                                'body': "Chegg Expert Q&A page showing some message. Kindly go to the page.",
+                                'body': "A Question available in your Chegg Live Expert Q&A Dashbord.",
                                 'tag': 'chegg_question_live',
                                 'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
                                 'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
                                 'image': chrome.runtime.getURL("assets/images/notification_image.png"),
                                 'vibrate': [2000],
                                 'renotify': true,
-                                'requireInteraction': false,
+                                'requireInteraction': true,
                                 'silent': false
                             });
                         }
-                        force_reload2 = true;
-                        setTimeout(function(){
-                            force_reload1 = true;
-                        }, 3*60*1000) // 3 minutes
-                    });
+                    }
+                    question_notified = true;
                 }
-                other_notified = true;
+                else if((no_question_div.length >= 1 && refresh_timer <= 0) || (force_reload1 && force_reload2)){
+                    // Refresh the page 
+                    location.reload();
+                }
+                else if(error_notification.length >= 1 && refresh_timer <= refreshInterval/2 && !question_fetched){
+                    // Refresh the page 
+                    location.reload();
+                }
+                else if(refresh_timer <= refreshInterval/2 && !question_fetched){
+                    if(!other_notified){
+                        chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
+                            try{
+                                // alert_sound.pause();
+                            }
+                            catch{}
+                            try{
+                                sent_notification.close();
+                            }
+                            catch{}
+                            try{
+                                audio_file = chrome.runtime.getURL("assets/audio/other_notification.mp3")
+                                alert_sound1 = new Audio(audio_file);
+                                // alert_sound1.volume = AlertSoundVolume;
+                                // alert_sound1.loop = true;
+                                alert_sound1.play();
+                            }
+                            catch{}
+                            let title = `ALERT!!\nSometing other displayed in Chegg Expert Q&A Page.`;
+                            console.log(title);
+                            if(NotificationEnabled){
+                                sent_notification = new Notification(title, {
+                                    'body': "Chegg Expert Q&A page showing some message. Kindly go to the page.",
+                                    'tag': 'chegg_question_live',
+                                    'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
+                                    'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
+                                    'image': chrome.runtime.getURL("assets/images/notification_image.png"),
+                                    'vibrate': [2000],
+                                    'renotify': true,
+                                    'requireInteraction': false,
+                                    'silent': false
+                                });
+                            }
+                            force_reload2 = true;
+                            setTimeout(function(){
+                                force_reload1 = true;
+                            }, 3*60*1000) // 3 minutes
+                        });
+                    }
+                    other_notified = true;
+                }
             }
             
         }, 1000);
