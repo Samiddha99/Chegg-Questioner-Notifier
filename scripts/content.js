@@ -181,42 +181,41 @@ function notifyQuestion(){
                     console.log('something other happend')
                     if(!other_notified){
                         chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
-                            try{
-                                // alert_sound.pause();
-                            }
-                            catch{}
-                            try{
-                                sent_notification.close();
-                            }
-                            catch{}
-                            try{
-                                audio_file = chrome.runtime.getURL("assets/audio/other_notification.mp3")
-                                alert_sound1 = new Audio(audio_file);
-                                // alert_sound1.volume = AlertSoundVolume;
-                                // alert_sound1.loop = true;
-                                alert_sound1.play();
-                            }
-                            catch{}
-                            let title = `ALERT!!\nSometing other displayed in Chegg Expert Q&A Page.`;
-                            console.log(title);
-                            if(NotificationEnabled){
-                                sent_notification = new Notification(title, {
-                                    'body': "Chegg Expert Q&A page showing some message. Kindly go to the page.",
-                                    'tag': 'chegg_question_live',
-                                    'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
-                                    'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
-                                    'image': chrome.runtime.getURL("assets/images/notification_image.png"),
-                                    'vibrate': [2000],
-                                    'renotify': true,
-                                    'requireInteraction': false,
-                                    'silent': false
-                                });
-                            }
-                            force_reload2 = true;
-                            setTimeout(function(){
-                                force_reload1 = true;
-                            }, 1*60*1000) // 1 minutes
+                            console.log('')
                         });
+                        try{
+                            // alert_sound.pause();
+                        }catch{}
+                        try{
+                            sent_notification.close();
+                        }catch{}
+                        try{
+                            audio_file = chrome.runtime.getURL("assets/audio/other_notification.mp3")
+                            alert_sound1 = new Audio(audio_file);
+                            // alert_sound1.volume = AlertSoundVolume;
+                            // alert_sound1.loop = true;
+                            alert_sound1.play();
+                        }
+                        catch{}
+                        let title = `ALERT!!\nSometing other displayed in Chegg Expert Q&A Page.`;
+                        console.log(title);
+                        if(NotificationEnabled){
+                            sent_notification = new Notification(title, {
+                                'body': "Chegg Expert Q&A page showing some message. Kindly go to the page.",
+                                'tag': 'chegg_question_live',
+                                'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
+                                'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
+                                'image': chrome.runtime.getURL("assets/images/notification_image.png"),
+                                'vibrate': [2000],
+                                'renotify': true,
+                                'requireInteraction': false,
+                                'silent': false
+                            });
+                        }
+                        force_reload2 = true;
+                        setTimeout(function(){
+                            force_reload1 = true;
+                        }, 1*60*1000) // 1 minutes
                     }
                     other_notified = true;
                 }
