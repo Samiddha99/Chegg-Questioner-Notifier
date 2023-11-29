@@ -260,7 +260,11 @@ window.addEventListener("load", function(){
 
 document.addEventListener('pointerover', (event) => {
     try{
-        // sent_notification.close();
+        setTimeout(function(){
+            try{
+                sent_notification.close();
+            }catch{}
+        }, 7000);
     }
     catch{}
     try{
@@ -271,7 +275,7 @@ document.addEventListener('pointerover', (event) => {
     force_reload2 = false;
 });
 
-document.querySelectorAll(`button[data-test="submit-answer-button"]`).forEach(function(element){
+document.querySelectorAll(`button[data-test="submit-answer-button"]`).forEach(element => {
     element.addEventListener("click", function(event){
         if(!this.disabled){
             let LastSubmission = new Date();
@@ -281,7 +285,7 @@ document.querySelectorAll(`button[data-test="submit-answer-button"]`).forEach(fu
         }
     });
 });
-document.querySelectorAll(`button[data-test="answer-submit-btn"]`).forEach(function(element){
+document.querySelectorAll(`button[data-test="answer-submit-btn"]`).forEach(element => {
     element.addEventListener("click", function(event){
         if(!this.disabled){
             let LastSubmission = new Date();
@@ -291,7 +295,7 @@ document.querySelectorAll(`button[data-test="answer-submit-btn"]`).forEach(funct
         }
     });
 });
-document.querySelectorAll(`button[data-test="my-submission-btn"]`).forEach(function(element){
+document.querySelectorAll(`button[data-test="my-submission-btn"]`).forEach(element => {
     element.addEventListener("click", function(event){
         if(!this.disabled){
             let LastSubmission = new Date();
