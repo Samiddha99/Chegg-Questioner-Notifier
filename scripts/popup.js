@@ -84,8 +84,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.getElementById('refresh_interval').addEventListener('keyup', function(event){
-        let refreshInterval = $(this).val()
+    document.getElementById('refresh_interval').addEventListener('change', function(event){
+        let refreshInterval = $(this).val();
+        if(Number(refreshInterval) < 10){
+            refreshInterval = 10;
+            $("#refresh_interval").val(refreshInterval);
+        }
         $("#refresh_interval-text").html(refreshInterval);
         chrome.storage.sync.set({ 'refreshInterval': refreshInterval }, function() {
             console.log('Settings saved!');

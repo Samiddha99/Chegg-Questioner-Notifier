@@ -168,6 +168,10 @@ window.addEventListener("load", function() {
 
     document.getElementById('refresh_interval-btn').addEventListener('click', function(event){
         let refreshInterval = $("#refresh_interval").val();
+        if(Number(refreshInterval) < 10){
+            refreshInterval = 10;
+            $("#refresh_interval").val(refreshInterval);
+        }
         $("#refresh_interval-text").html(refreshInterval);
         chrome.storage.sync.set({ 'refreshInterval': refreshInterval }, function() {
             console.log('Settings saved!');

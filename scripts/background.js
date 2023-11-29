@@ -71,32 +71,36 @@ chrome.runtime.onInstalled.addListener(function(details) {
 setInterval(function(){
     chrome.storage.sync.get(['LastSubmission', 'InactiveAlert'], function(result){
         var title = '';
-        var body = ''
+        var body = '';
+        var body1 = '';
         if(result.InactiveAlert){
+            let current = new Date();
             if (result.LastSubmission) {
-                let current = new Date();
                 let diff = ((current - result.LastSubmission)/1000)/3600;
                 if(diff >= 48){
                     title = 'ALERT!!\nYou are inactive in Chegg Live Expert Q&A'
                     body = `Recently you've not solved any question in Chegg Expert Q&A.\nYou've last solved question at ${formatDateTime(result.LastSubmission)}.`
+                    body1 = `Log into expert.chegg.com to start solving questions.`
                 }
             }
             else{
                 title = 'ALERT!!\nNo question solved in Chegg Live Expert Q&A'
                 body = `You've not solved any question in Chegg Expert Q&A`
+                body1 = `Log into expert.chegg.com to start solving questions.`
             }
             if(title != '' && body != ''){
-                sent_notification = new Notification(title, {
-                    'body': body,
-                    'tag': 'chegg_user_inactive',
-                    'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
-                    'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
-                    'image': chrome.runtime.getURL("assets/images/notification_image.png"),
-                    'vibrate': [2000],
-                    'renotify': true,
+                options= {
+                    'contextMessage': body1,
+                    'iconUrl': chrome.runtime.getURL("assets/images/notification_icon.webp"),
+                    'imageUrl': chrome.runtime.getURL("assets/images/notification_image.png"),
+                    'message': body,
+                    'priority': 2,
                     'requireInteraction': false,
-                    'silent': false
-                });
+                    'silent': false,
+                    'title': title,
+                    'type': "image"
+                }
+                chrome.notifications.create(notificationId=String(current.getTime()), options=options)
             }
         }
     });
