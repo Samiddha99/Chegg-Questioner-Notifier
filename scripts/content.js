@@ -91,6 +91,9 @@ function notifyQuestion(){
                 }
             }
             else if(location.href == qna_url && content_loads.length >= 1){
+                chrome.storage.sync.set({ 'ErrorRedirected': false }, function() {
+                    
+                });
                 wait_timer += 1;
                 let no_question_div = document.querySelectorAll('[data-test="no-question"]');
                 let question_div = document.querySelectorAll('[data-test="question"]');
@@ -248,12 +251,10 @@ window.addEventListener("load", function(){
         refreshInterval = result.refreshInterval || 10;
         console.log(result)
         console.log("Data for Chegg Question Notifier is read from storage.");
-        if(result.ErrorRedirected){
-            console.log("Chegg Question Notifier found Error Redirect.");
+        if(result.ErrorRedirected && location.href != qna_url){
+            console.log("Chegg Question Notifier found Error Redirection.");
             chrome.storage.sync.set({ 'ErrorRedirected': false }, function() {
-                if(location.href != qna_url){
-                    window.location.replace(qna_url);
-                }
+                location.replace(qna_url);
             });
         }
         else{
