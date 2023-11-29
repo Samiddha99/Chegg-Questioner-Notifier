@@ -75,6 +75,7 @@ function notifyQuestion(){
     console.log("Checking Chegg Question Notifier...");
     stopExtension(reload=true);
     var wait_timer = 0;
+    var wait_timer1 = 0;
     var reverse_timer = refreshInterval;
     var question_fetched = false;
     if(ExtensionEnabled == true){
@@ -82,8 +83,8 @@ function notifyQuestion(){
         start_interval = setInterval(function(){
             let content_loads = document.querySelectorAll(`[data-test="braze-notifications-header-button"]`)
             if(location.href == qna_url && content_loads.length == 0){
-                wait_timer += 1;
-                if(wait_timer >= 60){
+                wait_timer1 += 1;
+                if(wait_timer1 >= 60){
                     console.log('Page not completely loaded. Try refreshing.')
                     // Refresh the page 
                     location.reload();
@@ -91,23 +92,25 @@ function notifyQuestion(){
             }
             else if(location.href == qna_url && content_loads.length >= 1){
                 wait_timer += 1;
-                let no_question_div = document.querySelectorAll('[data-test="no-question"]')[0];
+                let no_question_div = document.querySelectorAll('[data-test="no-question"]');
                 let question_div = document.querySelectorAll('[data-test="question"]');
                 let error_notification = document.querySelectorAll('[data-test="notification"][type="error"]');
                 let extension_alert_msg = document.getElementById('chegg_questioner_notifier_msg');
-                if(!extension_alert_msg && no_question_div){
+                if(extension_alert_msg == undefined && no_question_div.length >= 1){
                     try{
-                        let msg = `<div style="text-align:center;">
-                            <h4 id="chegg_questioner_notifier_msg" style="color:red;">Chegg Question Notifier is Activated.</h4>
+                        let msg = `<div id="chegg_questioner_notifier_msg" style="text-align:center;">
+                            <h4 style="color:red;">Chegg Question Notifier is Activated.</h4>
                             <div style="font-size:14px; color:red;">Keep this page open. The page will refresh at every ${refreshInterval} seconds. You will get notification when question is avalibale.</div>
                             <div style="font-size:14px; color:red;">Refresh in <span id="reverse_timer">${reverse_timer}</span> seconds</div>
                         </div>`;
-                        no_question_div.insertAdjacentHTML("afterbegin", msg);
+                        no_question_div[0].insertAdjacentHTML("afterbegin", msg);
                     }
                     catch{}
                 }
-                reverse_timer -= 1;
-                document.getElementById("reverse_timer").innerHTML = reverse_timer;
+                else{
+                    reverse_timer -= 1;
+                    document.getElementById("reverse_timer").innerHTML = reverse_timer;
+                }
             
                 if(question_div.length >= 1){
                     question_fetched = true;
@@ -150,13 +153,18 @@ function notifyQuestion(){
                     }
                     question_notified = true;
                 }
-                else if((no_question_div.length >= 1 && wait_timer >= refreshInterval) || (force_reload1 && force_reload2)){
-                    // Refresh the page 
+                else if(force_reload1 && force_reload2){
                     location.reload();
                 }
-                else if(error_notification.length >= 1 && wait_timer >= 7 && !question_fetched){
-                    // Refresh the page 
-                    location.reload();
+                else if(no_question_div.length >= 1){
+                    if(wait_timer > refreshInterval){
+                        location.reload();
+                    }
+                }
+                else if(error_notification.length >= 1){
+                    if(wait_timer >= 7 && !question_fetched){
+                        location.reload();
+                    }
                 }
                 else if(wait_timer >= 7 && !question_fetched){
                     if(!other_notified){
