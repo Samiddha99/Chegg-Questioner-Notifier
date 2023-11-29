@@ -81,6 +81,7 @@ function notifyQuestion(){
     if(ExtensionEnabled == true){
         console.log(`Chegg Question Notifier is activated. Will refresh page in every ${refreshInterval} seconds`);
         start_interval = setInterval(function(){
+            let page_contents = String(document.documentElement.innerHTML).toLowerCase();
             let content_loads = document.querySelectorAll(`[data-test="braze-notifications-header-button"]`)
             if(location.href == qna_url && content_loads.length == 0){
                 wait_timer1 += 1;
@@ -167,11 +168,16 @@ function notifyQuestion(){
                     }
                 }
                 else if(error_notification.length >= 1){
-                    if(wait_timer >= 7 && !question_fetched){
+                    if(wait_timer >= 5 && !question_fetched){
                         location.reload();
                     }
                 }
-                else if(wait_timer >= 7 && !question_fetched){
+                // else if(page_contents.includes(`the page you are looking for is currently unavailable`)){
+                //     if(wait_timer >= 5){
+                //         location.reload();
+                //     }
+                // }
+                else if(wait_timer >= 5 && !question_fetched){
                     console.log('something other happend')
                     if(!other_notified){
                         chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
