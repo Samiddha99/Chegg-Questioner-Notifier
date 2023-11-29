@@ -75,7 +75,7 @@ function notifyQuestion(){
     console.log("Checking Chegg Question Notifier...");
     stopExtension(reload=true);
     var wait_timer = 0;
-    var refresh_timer = refreshInterval;
+    var reverse_timer = refreshInterval;
     var question_fetched = false;
     if(ExtensionEnabled == true){
         console.log(`Chegg Question Notifier is activated. Will refresh page in every ${refreshInterval} seconds`);
@@ -90,6 +90,7 @@ function notifyQuestion(){
                 }
             }
             else if(location.href == qna_url && content_loads.length >= 1){
+                wait_timer += 1;
                 let no_question_div = document.querySelectorAll('[data-test="no-question"]')[0];
                 let question_div = document.querySelectorAll('[data-test="question"]');
                 let error_notification = document.querySelectorAll('[data-test="notification"][type="error"]');
@@ -99,18 +100,18 @@ function notifyQuestion(){
                         let msg = `<div style="text-align:center;">
                             <h4 id="chegg_questioner_notifier_msg" style="color:red;">Chegg Question Notifier is Activated.</h4>
                             <div style="font-size:14px; color:red;">Keep this page open. The page will refresh at every ${refreshInterval} seconds. You will get notification when question is avalibale.</div>
-                            <div style="font-size:14px; color:red;">Refresh in <span id="refresh_timer">${refresh_timer}</span> seconds</div>
+                            <div style="font-size:14px; color:red;">Refresh in <span id="reverse_timer">${reverse_timer}</span> seconds</div>
                         </div>`;
                         no_question_div.insertAdjacentHTML("afterbegin", msg);
                     }
                     catch{}
                 }
-                refresh_timer -= 1;
-                document.getElementById("refresh_timer").innerHTML = refresh_timer;
+                reverse_timer -= 1;
+                document.getElementById("reverse_timer").innerHTML = reverse_timer;
             
                 if(question_div.length >= 1){
                     question_fetched = true;
-                    refresh_timer = refreshInterval;
+                    wait_timer = 0;
                     // other_notified = false;
                     if(!question_notified){
                         let title = `HURRAY!\nNew Question in Chegg!`;
@@ -149,15 +150,15 @@ function notifyQuestion(){
                     }
                     question_notified = true;
                 }
-                else if((no_question_div.length >= 1 && refresh_timer <= 0) || (force_reload1 && force_reload2)){
+                else if((no_question_div.length >= 1 && wait_timer >= refreshInterval) || (force_reload1 && force_reload2)){
                     // Refresh the page 
                     location.reload();
                 }
-                else if(error_notification.length >= 1 && refresh_timer <= refreshInterval/2 && !question_fetched){
+                else if(error_notification.length >= 1 && wait_timer >= 7 && !question_fetched){
                     // Refresh the page 
                     location.reload();
                 }
-                else if(refresh_timer <= refreshInterval/2 && !question_fetched){
+                else if(wait_timer >= 7 && !question_fetched){
                     if(!other_notified){
                         chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
                             try{
