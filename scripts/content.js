@@ -259,6 +259,8 @@ window.addEventListener("load", function(){
 
 
 document.addEventListener('pointerover', (event) => {
+    force_reload1 = false;
+    force_reload2 = false;
     setTimeout(function(){
         try{
             sent_notification.close();
@@ -267,8 +269,6 @@ document.addEventListener('pointerover', (event) => {
             alert_sound.pause();
         }catch{}
     }, 3000);
-    force_reload1 = false;
-    force_reload2 = false;
 });
 
 document.querySelectorAll(`button[data-test="submit-answer-button"]`).forEach(element => {
