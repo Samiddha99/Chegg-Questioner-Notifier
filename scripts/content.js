@@ -108,8 +108,10 @@ function notifyQuestion(){
                     catch{}
                 }
                 else{
-                    reverse_timer -= 1;
-                    document.getElementById("reverse_timer").innerHTML = reverse_timer;
+                    try{
+                        reverse_timer -= 1;
+                        document.getElementById("reverse_timer").innerHTML = reverse_timer;
+                    }catch{}
                 }
             
                 if(question_div.length >= 1){
