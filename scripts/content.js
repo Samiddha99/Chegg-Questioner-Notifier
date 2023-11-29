@@ -172,11 +172,11 @@ function notifyQuestion(){
                         location.reload();
                     }
                 }
-                // else if(page_contents.includes(`the page you are looking for is currently unavailable`)){
-                //     if(wait_timer >= 5){
-                //         location.reload();
-                //     }
-                // }
+                else if(page_contents.includes(`the page you are looking for is currently unavailable`)){
+                    chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
+                        location.reload();
+                    });
+                }
                 else if(wait_timer >= 5 && !question_fetched){
                     console.log('something other happend')
                     if(!other_notified){
