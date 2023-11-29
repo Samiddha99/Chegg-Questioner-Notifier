@@ -172,6 +172,7 @@ function notifyQuestion(){
                     }
                 }
                 else if(wait_timer >= 7 && !question_fetched){
+                    console.log('something other happend')
                     if(!other_notified){
                         chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
                             try{
