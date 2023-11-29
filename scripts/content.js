@@ -205,7 +205,7 @@ function notifyQuestion(){
                             force_reload2 = true;
                             setTimeout(function(){
                                 force_reload1 = true;
-                            }, 3*60*1000) // 3 minutes
+                            }, 1*60*1000) // 1 minutes
                         });
                     }
                     other_notified = true;
