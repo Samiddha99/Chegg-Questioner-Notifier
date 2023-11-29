@@ -193,7 +193,7 @@ function notifyQuestion(){
                                 'image': chrome.runtime.getURL("assets/images/notification_image.png"),
                                 'vibrate': [2000],
                                 'renotify': true,
-                                'requireInteraction': true,
+                                'requireInteraction': false,
                                 'silent': false
                             });
                         }
@@ -259,18 +259,14 @@ window.addEventListener("load", function(){
 
 
 document.addEventListener('pointerover', (event) => {
-    try{
-        setTimeout(function(){
-            try{
-                sent_notification.close();
-            }catch{}
-        }, 7000);
-    }
-    catch{}
-    try{
-        alert_sound.pause();
-    }
-    catch{}
+    setTimeout(function(){
+        try{
+            sent_notification.close();
+        }catch{}
+        try{
+            alert_sound.pause();
+        }catch{}
+    }, 3000);
     force_reload1 = false;
     force_reload2 = false;
 });
