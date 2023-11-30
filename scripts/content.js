@@ -88,10 +88,12 @@ function notifyQuestion(){
 
             if(question_fetched === false && location.href !== qna_url){
                 if(QnA_exited === undefined){
+                    console.log("User left QnA page");
                     QnA_exited = true;
                     setTimeout(function(){
                         if(user_active === undefined){
-                            location.reload();
+                            console.log("System left QnA page, so again redirect to QnA page.");
+                            location.replace(qna_url);
                         }
                     }, 1*60*1000) // 1 minutes
                 }
@@ -275,6 +277,7 @@ window.addEventListener("load", function(){
         AlertSound = result.AlertSound['url'];
         AlertSoundVolume = result.AlertSoundVolume;
         refreshInterval = result.refreshInterval || 30;
+        console.log(`URL ${location.href} loaded fully.`);
         console.log(result)
         console.log("Data for Chegg Question Notifier is read from storage.");
         if(result.ErrorRedirected && location.href != qna_url){
