@@ -28,8 +28,11 @@ var sent_notification;
 var alert_sound;
 var question_notified = false;
 var other_notified = false;
+var user_active = undefined;
 var force_reload1 = false;
 var force_reload2 = false;
+var question_fetched = undefined;
+var QnA_exited = undefined;
 
 var ExtensionEnabled = false;
 var NotificationEnabled = false;
@@ -77,12 +80,24 @@ function notifyQuestion(){
     var wait_timer = 0;
     var wait_timer1 = 0;
     var reverse_timer = refreshInterval;
-    var question_fetched = false;
     if(ExtensionEnabled == true){
         console.log(`Chegg Question Notifier is activated. Will refresh page in every ${refreshInterval} seconds`);
         start_interval = setInterval(function(){
             let page_contents = String(document.documentElement.innerHTML).toLowerCase();
-            let content_loads = document.querySelectorAll(`[data-test="braze-notifications-header-button"]`)
+            let content_loads = document.querySelectorAll(`[data-test="braze-notifications-header-button"]`);
+
+            if(question_fetched === false && location.href !== qna_url){
+                if(QnA_exited === undefined){
+                    QnA_exited = true;
+                    setTimeout(function(){
+                        if(user_active === undefined){
+                            location.reload();
+                        }
+                    }, 1*60*1000) // 1 minutes
+                }
+            }
+
+            question_fetched = false;
             if(location.href == qna_url && content_loads.length == 0){
                 wait_timer1 += 1;
                 if(wait_timer1 >= 60){
@@ -288,6 +303,9 @@ document.addEventListener('pointerover', (event) => {
             alert_sound.pause();
         }catch{}
     }, 3000);
+    if(QnA_exited === true){
+        user_active = true
+    }
 });
 
 // document.querySelectorAll(`button[data-test="submit-answer-button"]`).forEach(element => {
