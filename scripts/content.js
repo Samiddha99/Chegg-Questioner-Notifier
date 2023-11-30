@@ -100,7 +100,7 @@ function notifyQuestion(){
                 let question_div = document.querySelectorAll('[data-test="question"]');
                 let error_notification = document.querySelectorAll('[data-test="notification"][type="error"]');
                 let extension_alert_msg = document.getElementById('chegg_questioner_notifier_msg');
-                if(extension_alert_msg == undefined && no_question_div.length >= 1){
+                if(!extension_alert_msg && no_question_div.length >= 1){
                     try{
                         let msg = `<div id="chegg_questioner_notifier_msg" style="text-align:center;">
                             <h4 style="color:red;">Chegg Question Notifier is Activated.</h4>
@@ -111,7 +111,7 @@ function notifyQuestion(){
                     }
                     catch{}
                 }
-                else{
+                else if(no_question_div.length >= 1){
                     try{
                         reverse_timer -= 1;
                         document.getElementById("reverse_timer").innerHTML = reverse_timer;
