@@ -161,6 +161,7 @@ function notifyQuestion(){
                     question_notified = true;
                 }
                 else if(force_reload1 && force_reload2){
+                    console.log('Force Reload')
                     location.reload();
                 }
                 else if(no_question_div.length >= 1){
@@ -170,11 +171,13 @@ function notifyQuestion(){
                 }
                 else if(error_notification.length >= 1){
                     if(wait_timer >= 10 && !question_fetched){
+                        console.log('Error Notification Reload')
                         location.reload();
                     }
                 }
                 else if(page_contents.includes(`the page you are looking for is currently unavailable`)){
                     chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
+                        console.log('Page Unavailable Reload')
                         location.reload();
                     });
                 }
@@ -182,7 +185,7 @@ function notifyQuestion(){
                     console.log('something other happend')
                     if(!other_notified){
                         chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
-                            console.log('')
+                            console.log('ErrorRedirected set to ture')
                         });
                         try{
                             // alert_sound.pause();
@@ -215,6 +218,7 @@ function notifyQuestion(){
                         }
                         force_reload1 = true;
                         setTimeout(function(){
+                            console.log('something other happend - force reload')
                             force_reload2 = true;
                         }, 1*60*1000) // 1 minutes
                     }
@@ -261,6 +265,7 @@ window.addEventListener("load", function(){
         if(result.ErrorRedirected && location.href != qna_url){
             console.log("Chegg Question Notifier found Error Redirection.");
             chrome.storage.sync.set({ 'ErrorRedirected': false }, function() {
+                console.log('ErrorRedirected set to false. And redirecting to Expert QnA')
                 location.replace(qna_url);
             });
         }
