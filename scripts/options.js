@@ -134,21 +134,21 @@ window.addEventListener("load", function() {
         });
     });
 
-    document.getElementById('inactive_alert_enabled').addEventListener('change', function(event){
-        let InactiveAlert;
-        if (event.currentTarget.checked) {
-            InactiveAlert = true;
-            $('#inactive_alert_enabled-label').html("Disable the Inactive Alert");
-            $("#inactive_alert_enabled-info").html('An alert will send to you if you not solved question in Chegg Expert Q&A in 48 hours.');
-        } else {
-            InactiveAlert = false;
-            $('#inactive_alert_enabled-label').html("Enable the Inactive Alert");
-            $("#inactive_alert_enabled-info").html('No in-active alert will be send to you.');
-        }
-        chrome.storage.sync.set({ 'InactiveAlert': InactiveAlert }, function() {
-            console.log('Settings saved!');
-        });
-    });
+    // document.getElementById('inactive_alert_enabled').addEventListener('change', function(event){
+    //     let InactiveAlert;
+    //     if (event.currentTarget.checked) {
+    //         InactiveAlert = true;
+    //         $('#inactive_alert_enabled-label').html("Disable the Inactive Alert");
+    //         $("#inactive_alert_enabled-info").html('An alert will send to you if you not solved question in Chegg Expert Q&A in 48 hours.');
+    //     } else {
+    //         InactiveAlert = false;
+    //         $('#inactive_alert_enabled-label').html("Enable the Inactive Alert");
+    //         $("#inactive_alert_enabled-info").html('No in-active alert will be send to you.');
+    //     }
+    //     chrome.storage.sync.set({ 'InactiveAlert': InactiveAlert }, function() {
+    //         console.log('Settings saved!');
+    //     });
+    // });
 
     document.getElementById('alertsound_enabled').addEventListener('change', function(event){
         let AlertSoundEnabled;
@@ -230,14 +230,14 @@ window.addEventListener("load", function() {
             // notification_test = 'chegg_user_inactive';
             let title = `!!TEST NOTIFICATION!!\nHURRAY! New Question in Chegg!`;
             sent_notification = new Notification(title, {
-                'body': "A Question available in your Chegg Live Expert Q&A Dashbord.",
+                'body': "An Question is available in your Chegg Live Expert Q&A Dashbord.",
                 'tag': 'test_notification',
                 'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
                 'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
                 'image': chrome.runtime.getURL("assets/images/notification_image.png"),
                 'vibrate': [2000],
                 'renotify': true,
-                'requireInteraction': true,
+                'requireInteraction': false,
                 'silent': false
             });
         }

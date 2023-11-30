@@ -36,12 +36,12 @@ var NotificationEnabled = false;
 var AlertSoundEnabled = false;
 var AlertSound;
 var AlertSoundVolume;
-var refreshInterval = 10;
+var refreshInterval = 30;
 
 // Listen for changes in storage and update
 chrome.storage.onChanged.addListener(function (changes, namespace) {
     if (changes.refreshInterval) {
-        refreshInterval = changes.refreshInterval.newValue || 10;
+        refreshInterval = changes.refreshInterval.newValue || 30;
         console.log("Chegg Question Notifier Rr-loaded...");
         notifyQuestion();
     }
@@ -146,7 +146,7 @@ function notifyQuestion(){
                         }
                         if(NotificationEnabled){
                             sent_notification = new Notification(title, {
-                                'body': "A Question available in your Chegg Live Expert Q&A Dashbord.",
+                                'body': "An Question is available in your Chegg Live Expert Q&A Dashbord.",
                                 'tag': 'chegg_question_live',
                                 'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
                                 'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
@@ -255,7 +255,7 @@ window.addEventListener("load", function(){
         AlertSoundEnabled = result.AlertSoundEnabled;
         AlertSound = result.AlertSound['url'];
         AlertSoundVolume = result.AlertSoundVolume;
-        refreshInterval = result.refreshInterval || 10;
+        refreshInterval = result.refreshInterval || 30;
         console.log(result)
         console.log("Data for Chegg Question Notifier is read from storage.");
         if(result.ErrorRedirected && location.href != qna_url){

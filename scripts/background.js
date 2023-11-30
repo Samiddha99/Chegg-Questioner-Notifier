@@ -35,7 +35,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
     //   )
       
     }
-    // Set default refresh interval to 10 seconds if not already set
+    
     chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'refreshInterval', 'LastSubmission'], function(result) {
         if (!result.ExtensionEnabled) {
             chrome.storage.sync.set({ 'ExtensionEnabled': true });
@@ -57,7 +57,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
             chrome.storage.sync.set({ 'AlertSound': sound });
         }
         if (!result.refreshInterval) {
-            chrome.storage.sync.set({ 'refreshInterval': 10 });
+            chrome.storage.sync.set({ 'refreshInterval': 30 });
         }
         if (!result.LastSubmission) {
             chrome.storage.sync.set({ 'LastSubmission': null });
