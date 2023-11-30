@@ -227,7 +227,7 @@ window.addEventListener("load", function() {
 
     $("#test-notification-btn").on('click', function(){
         if(notification_test == 'chegg_question_live'){
-            notification_test = 'chegg_user_inactive';
+            // notification_test = 'chegg_user_inactive';
             let title = `!!TEST NOTIFICATION!!\nHURRAY! New Question in Chegg!`;
             sent_notification = new Notification(title, {
                 'body': "A Question available in your Chegg Live Expert Q&A Dashbord.",

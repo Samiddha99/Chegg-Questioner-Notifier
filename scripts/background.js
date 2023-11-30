@@ -100,7 +100,7 @@ setInterval(function(){
                     'title': title,
                     'type': "image"
                 }
-                chrome.notifications.create(notificationId=String(current.getTime()), options=options)
+                // chrome.notifications.create(notificationId=String(current.getTime()), options=options)
             }
         }
     });

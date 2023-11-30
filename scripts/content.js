@@ -121,6 +121,7 @@ function notifyQuestion(){
                 if(question_div.length >= 1){
                     question_fetched = true;
                     wait_timer = 0;
+                    reverse_timer = refreshInterval;
                     // other_notified = false;
                     if(!question_notified){
                         let title = `HURRAY!\nNew Question in Chegg!`;
@@ -168,7 +169,7 @@ function notifyQuestion(){
                     }
                 }
                 else if(error_notification.length >= 1){
-                    if(wait_timer >= 5 && !question_fetched){
+                    if(wait_timer >= 10 && !question_fetched){
                         location.reload();
                     }
                 }
@@ -177,7 +178,7 @@ function notifyQuestion(){
                         location.reload();
                     });
                 }
-                else if(wait_timer >= 5 && !question_fetched){
+                else if(wait_timer >= 7 && !question_fetched){
                     console.log('something other happend')
                     if(!other_notified){
                         chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
@@ -212,9 +213,9 @@ function notifyQuestion(){
                                 'silent': false
                             });
                         }
-                        force_reload2 = true;
+                        force_reload1 = true;
                         setTimeout(function(){
-                            force_reload1 = true;
+                            force_reload2 = true;
                         }, 1*60*1000) // 1 minutes
                     }
                     other_notified = true;
@@ -284,33 +285,33 @@ document.addEventListener('pointerover', (event) => {
     }, 3000);
 });
 
-document.querySelectorAll(`button[data-test="submit-answer-button"]`).forEach(element => {
-    element.addEventListener("click", function(event){
-        if(!this.disabled){
-            let LastSubmission = new Date();
-            chrome.storage.sync.set({ 'LastSubmission': LastSubmission }, function() {
-                console.log('Chegg Q&A Solution Submitted.');
-            });
-        }
-    });
-});
-document.querySelectorAll(`button[data-test="answer-submit-btn"]`).forEach(element => {
-    element.addEventListener("click", function(event){
-        if(!this.disabled){
-            let LastSubmission = new Date();
-            chrome.storage.sync.set({ 'LastSubmission': LastSubmission }, function() {
-                console.log('Chegg Q&A Solution Submitted.');
-            });
-        }
-    });
-});
-document.querySelectorAll(`button[data-test="my-submission-btn"]`).forEach(element => {
-    element.addEventListener("click", function(event){
-        if(!this.disabled){
-            let LastSubmission = new Date();
-            chrome.storage.sync.set({ 'LastSubmission': LastSubmission }, function() {
-                console.log('Chegg Q&A Solution Submitted.');
-            });
-        }
-    });
-});
+// document.querySelectorAll(`button[data-test="submit-answer-button"]`).forEach(element => {
+//     element.addEventListener("click", function(event){
+//         if(!this.disabled){
+//             let LastSubmission = new Date();
+//             chrome.storage.sync.set({ 'LastSubmission': LastSubmission }, function() {
+//                 console.log('Chegg Q&A Solution Submitted.');
+//             });
+//         }
+//     });
+// });
+// document.querySelectorAll(`button[data-test="answer-submit-btn"]`).forEach(element => {
+//     element.addEventListener("click", function(event){
+//         if(!this.disabled){
+//             let LastSubmission = new Date();
+//             chrome.storage.sync.set({ 'LastSubmission': LastSubmission }, function() {
+//                 console.log('Chegg Q&A Solution Submitted.');
+//             });
+//         }
+//     });
+// });
+// document.querySelectorAll(`button[data-test="my-submission-btn"]`).forEach(element => {
+//     element.addEventListener("click", function(event){
+//         if(!this.disabled){
+//             let LastSubmission = new Date();
+//             chrome.storage.sync.set({ 'LastSubmission': LastSubmission }, function() {
+//                 console.log('Chegg Q&A Solution Submitted.');
+//             });
+//         }
+//     });
+// });
