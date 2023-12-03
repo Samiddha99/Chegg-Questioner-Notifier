@@ -1,5 +1,10 @@
 
 var qna_url = "https://expert.chegg.com/qna/authoring/answer"
+
+function getCookies(name){
+    const cookieValue = document.cookie.split("; ").find((row) => row.startsWith("test2="))?.split("=")[1];
+    return  cookieValue
+}
 function PopIt(event) {
     // Extension 2
     console.log("Reload Alert!.")
@@ -109,9 +114,12 @@ function notifyQuestion(){
                 }
             }
             else if(location.href == qna_url && content_loads.length >= 1){
-                chrome.storage.sync.set({ 'ErrorRedirected': false }, function() {
-                    
-                });
+                // let ErrorRedirected = browser.cookies.set({
+                //     url: location.origin,
+                //     name: 'ErrorRedirected',
+                //     value: '0'
+                // })
+                document.cookie = "ErrorRedirected=0; path=/";
                 wait_timer += 1;
                 let no_question_div = document.querySelectorAll('[data-test="no-question"]');
                 let question_div = document.querySelectorAll('[data-test="question"]');
@@ -187,59 +195,76 @@ function notifyQuestion(){
                     }
                 }
                 else if(error_notification.length >= 1){
-                    if(wait_timer >= 10 && !question_fetched){
+                    console.log('Error Notification Found')
+                    if(wait_timer >= 5 && !question_fetched){
                         console.log('Error Notification Reload')
                         location.reload();
                     }
                 }
                 else if(page_contents.includes(`the page you are looking for is currently unavailable`)){
-                    chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
-                        console.log('Page Unavailable Reload')
-                        location.reload();
-                    });
+                    console.log('The page you are looking for is currently unavailable')
+                    // browser.cookies.set({
+                    //     url: location.origin,
+                    //     name: 'ErrorRedirected',
+                    //     value: '1'
+                    // }).then(function(){
+                    //     console.log('Page Unavailable Reload')
+                    //     location.reload();
+                    // });
+                    document.cookie = "ErrorRedirected=1; path=/";
+                    console.log('Page Unavailable Reload')
+                    location.reload();
                 }
-                else if(wait_timer >= 7 && !question_fetched){
-                    console.log('something other happend')
-                    if(!other_notified){
-                        chrome.storage.sync.set({ 'ErrorRedirected': true }, function() {
-                            console.log('ErrorRedirected set to ture')
-                        });
-                        try{
-                            // alert_sound.pause();
-                        }catch{}
-                        try{
-                            sent_notification.close();
-                        }catch{}
-                        try{
-                            audio_file = chrome.runtime.getURL("assets/audio/other_notification.mp3")
-                            alert_sound1 = new Audio(audio_file);
-                            // alert_sound1.volume = AlertSoundVolume;
-                            // alert_sound1.loop = true;
-                            alert_sound1.play();
+                else{
+                    console.log('Something other appeared')
+                    if(wait_timer >= 3 && !question_fetched){
+                        console.log('something other is still appearing.')
+                        if(!other_notified){
+                            // browser.cookies.set({
+                            //     url: location.origin,
+                            //     name: 'ErrorRedirected',
+                            //     value: '1'
+                            // }).then(function(){
+                            //     console.log('ErrorRedirected set to ture')
+                            // });
+                            document.cookie = "ErrorRedirected=1; path=/";
+                            try{
+                                // alert_sound.pause();
+                            }catch{}
+                            try{
+                                sent_notification.close();
+                            }catch{}
+                            try{
+                                audio_file = chrome.runtime.getURL("assets/audio/other_notification.mp3")
+                                alert_sound1 = new Audio(audio_file);
+                                // alert_sound1.volume = AlertSoundVolume;
+                                // alert_sound1.loop = true;
+                                alert_sound1.play();
+                            }
+                            catch{}
+                            let title = `ALERT!!\nSometing other displayed in Chegg Expert Q&A Page.`;
+                            console.log(title);
+                            if(NotificationEnabled){
+                                sent_notification = new Notification(title, {
+                                    'body': "Chegg Expert Q&A page showing some message. Kindly go to the page.",
+                                    'tag': 'chegg_question_live',
+                                    'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
+                                    'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
+                                    'image': chrome.runtime.getURL("assets/images/notification_image.png"),
+                                    'vibrate': [2000],
+                                    'renotify': true,
+                                    'requireInteraction': false,
+                                    'silent': false
+                                });
+                            }
+                            force_reload1 = true;
+                            setTimeout(function(){
+                                console.log('something other happend - force reload')
+                                force_reload2 = true;
+                            }, 1*60*1000) // 1 minutes
                         }
-                        catch{}
-                        let title = `ALERT!!\nSometing other displayed in Chegg Expert Q&A Page.`;
-                        console.log(title);
-                        if(NotificationEnabled){
-                            sent_notification = new Notification(title, {
-                                'body': "Chegg Expert Q&A page showing some message. Kindly go to the page.",
-                                'tag': 'chegg_question_live',
-                                'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
-                                'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
-                                'image': chrome.runtime.getURL("assets/images/notification_image.png"),
-                                'vibrate': [2000],
-                                'renotify': true,
-                                'requireInteraction': false,
-                                'silent': false
-                            });
-                        }
-                        force_reload1 = true;
-                        setTimeout(function(){
-                            console.log('something other happend - force reload')
-                            force_reload2 = true;
-                        }, 1*60*1000) // 1 minutes
+                        other_notified = true;
                     }
-                    other_notified = true;
                 }
             }
             
@@ -270,7 +295,7 @@ function stopExtension(reload=false){
 }
 window.addEventListener("load", function(){
     console.log("Chegg Question Notifier is ready as page loaded.");
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'refreshInterval', 'ErrorRedirected'], function (result) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'refreshInterval'], function (result) {
         ExtensionEnabled = result.ExtensionEnabled;
         NotificationEnabled = result.NotificationEnabled;
         AlertSoundEnabled = result.AlertSoundEnabled;
@@ -280,12 +305,11 @@ window.addEventListener("load", function(){
         console.log(`URL ${location.href} loaded fully.`);
         console.log(result)
         console.log("Data for Chegg Question Notifier is read from storage.");
-        if(result.ErrorRedirected && location.href != qna_url){
+
+        let ErrorRedirected = getCookies('ErrorRedirected');
+        if(ErrorRedirected == '1' && location.href != qna_url){
             console.log("Chegg Question Notifier found Error Redirection.");
-            chrome.storage.sync.set({ 'ErrorRedirected': false }, function() {
-                console.log('ErrorRedirected set to false. And redirecting to Expert QnA')
-                location.replace(qna_url);
-            });
+            location.replace(qna_url);
         }
         else{
             notifyQuestion();
