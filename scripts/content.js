@@ -38,6 +38,8 @@ var force_reload1 = false;
 var force_reload2 = false;
 var question_fetched = undefined;
 var QnA_exited = undefined;
+var timer_sound;
+var timer_sound_played = false;
 
 var ExtensionEnabled = false;
 var NotificationEnabled = false;
@@ -120,6 +122,28 @@ function notifyQuestion(){
                 //     value: '0'
                 // })
                 document.cookie = "ErrorRedirected=0; path=/";
+                try{
+                    let start_solving_timer_hr = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="hours"]`)[0].innerHTML);
+                    let start_solving_timer_min = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="minutes"]`)[0].innerHTML);
+                    let start_solving_timer_sec = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="seconds"]`)[0].innerHTML);
+                    let start_solving_timer = start_solving_timer_hr*3600 + start_solving_timer_min*60 + start_solving_timer_sec;
+                    if(start_solving_timer < 60 && !timer_sound_played){
+                        timer_sound_played = true;
+                        time_ending_audio = chrome.runtime.getURL("assets/audio/time_ending.mp3")
+                        timer_sound = new Audio(time_ending_audio);
+                        timer_sound.volume = 1;
+                        timer_sound.play();
+                    }
+                    if(start_solving_timer >= 60){
+                        timer_sound_played = false;
+                        timer_sound.pause();
+                    }
+                }catch{
+                    timer_sound_played = false;
+                    try{
+                        timer_sound.pause();
+                    }catch{}
+                }
                 wait_timer += 1;
                 let no_question_div = document.querySelectorAll('[data-test="no-question"]');
                 let question_div = document.querySelectorAll('[data-test="question"]');
