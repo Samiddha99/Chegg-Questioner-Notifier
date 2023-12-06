@@ -182,7 +182,7 @@ function notifyQuestion(){
                         }
                         catch{}
                         try{
-                            // sent_notification.close();
+                            sent_notification.close();
                         }
                         catch{}
                         if(AlertSoundEnabled){
