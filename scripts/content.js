@@ -128,6 +128,7 @@ function notifyQuestion(){
                     let start_solving_timer_sec = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="seconds"]`)[0].innerHTML);
                     let start_solving_timer = start_solving_timer_hr*3600 + start_solving_timer_min*60 + start_solving_timer_sec;
                     if(start_solving_timer < 60 && !timer_sound_played){
+                        console.log('Less than 1 minute remain.')
                         timer_sound_played = true;
                         time_ending_audio = chrome.runtime.getURL("assets/audio/time_ending.mp3")
                         timer_sound = new Audio(time_ending_audio);
@@ -138,11 +139,12 @@ function notifyQuestion(){
                         timer_sound_played = false;
                         timer_sound.pause();
                     }
-                }catch{
+                }catch(e){
+                    console.error(e)
                     timer_sound_played = false;
                     try{
                         timer_sound.pause();
-                    }catch{}
+                    }catch(e){console.error(e)}
                 }
                 wait_timer += 1;
                 let no_question_div = document.querySelectorAll('[data-test="no-question"]');
