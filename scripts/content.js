@@ -182,7 +182,7 @@ function notifyQuestion(){
                         }
                         catch{}
                         try{
-                            sent_notification.close();
+                            // sent_notification.close();
                         }
                         catch{}
                         if(AlertSoundEnabled){
@@ -196,9 +196,10 @@ function notifyQuestion(){
                             catch{}
                         }
                         if(NotificationEnabled){
+                            unique_id = Math.random();
                             sent_notification = new Notification(title, {
                                 'body': "An Question is available in your Chegg Live Expert Q&A Dashbord.",
-                                'tag': 'chegg_question_live',
+                                'tag': `chegg_question_live-${unique_id}`,
                                 'badge': chrome.runtime.getURL("assets/images/notification_badge.png"),
                                 'icon': chrome.runtime.getURL("assets/images/notification_icon.webp"),
                                 'image': chrome.runtime.getURL("assets/images/notification_image.png"),
