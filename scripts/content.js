@@ -356,7 +356,7 @@ document.addEventListener('pointerover', (event) => {
         try{
             alert_sound.pause();
         }catch{}
-    }, 3000);
+    }, 1000);
     if(QnA_exited === true){
         user_active = true
     }
