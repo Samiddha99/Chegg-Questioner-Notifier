@@ -127,6 +127,7 @@ function notifyQuestion(){
                     let start_solving_timer_min = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="minutes"]`)[0].innerHTML);
                     let start_solving_timer_sec = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="seconds"]`)[0].innerHTML);
                     let start_solving_timer = start_solving_timer_hr*3600 + start_solving_timer_min*60 + start_solving_timer_sec;
+                    console.log('start_solving_timer', start_solving_timer)
                     if(start_solving_timer < 60 && !timer_sound_played){
                         console.log('Less than 1 minute remain.')
                         timer_sound_played = true;
@@ -139,12 +140,11 @@ function notifyQuestion(){
                         timer_sound_played = false;
                         timer_sound.pause();
                     }
-                }catch(e){
-                    console.error(e)
+                }catch{
                     timer_sound_played = false;
                     try{
                         timer_sound.pause();
-                    }catch(e){console.error(e)}
+                    }catch{}
                 }
                 wait_timer += 1;
                 let no_question_div = document.querySelectorAll('[data-test="no-question"]');
