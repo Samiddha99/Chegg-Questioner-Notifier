@@ -1,5 +1,27 @@
+
+function formatDateTime(dateTime)
+{
+    if(dateTime == '' || dateTime == undefined || dateTime == null || dateTime == 'None'){
+        return `N/A`
+    }
+    else{
+        var dt = new Date(dateTime);
+        var hours = dt.getHours();
+        var minutes = dt.getMinutes();
+        var ampm = hours >= 12 ? 'PM' : 'AM'; //AM or PM
+        hours = hours % 12; //convert in 12-hour format;
+        hours = hours ? hours : 12; //display 0 as 12
+        var day = dt.toLocaleString('default', { day: 'numeric' });
+        var month = dt.toLocaleString('default', { month: 'long' });
+        var year = dt.toLocaleString('default', { year: 'numeric' });
+        
+        dt = `${(day <= 9) ? '0'+day : day} ${(month <= 9) ? '0'+month : month} ${(year <= 9) ? '0'+year : year}, ${(hours <= 9) ? '0'+hours : hours}:${(minutes <= 9) ? '0'+minutes : minutes} ${ampm}`;
+        return dt;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'refreshInterval'], function (result) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'refreshInterval', 'TotalQuestions', 'LastQuetionTime'], function (result) {
         if (result.ExtensionEnabled == true) {
             $('#extension_enabled').prop('checked', true);
             $('#extension_enabled-label').html("Disable the Extension");
@@ -34,6 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#refresh_interval').val(result.refreshInterval);
             $("#refresh_interval-text").html(result.refreshInterval);
         } 
+        
+        $("#total_questions").html(result.TotalQuestions);
+        LastQuetionTime = formatDateTime(result.LastQuetionTime);
+        $("#last_ques_fetched").html(LastQuetionTime);
+        
     });
     
     document.getElementById('extension_enabled').addEventListener('change', function(event){

@@ -192,6 +192,7 @@ function notifyQuestion(){
                                 alert_sound.volume = AlertSoundVolume;
                                 alert_sound.loop = true;
                                 alert_sound.play();
+                                console.log('Alert Sound Played. ', alert_sound)
                             }
                             catch{}
                         }
@@ -208,7 +209,20 @@ function notifyQuestion(){
                                 'requireInteraction': true,
                                 'silent': false
                             });
+                            console.log('Notification Sent. ', sent_notification);
                         }
+                        
+                        chrome.storage.sync.get(['TotalQuestions'], function(result){
+                            if(result.TotalQuestions == null || result.TotalQuestions == undefined){
+                                TotalQuestions = 1
+                            }
+                            else{
+                                TotalQuestions = Number(result.TotalQuestions)+1
+                            }
+                            chrome.storage.sync.set({ 'TotalQuestions': TotalQuestions });
+                            curr_time = new Date()
+                            chrome.storage.sync.set({ 'LastQuetionTime': curr_time });
+                        });
                     }
                     question_notified = true;
                 }
@@ -224,6 +238,7 @@ function notifyQuestion(){
                 else if(error_notification.length >= 1){
                     console.log('Error Notification Found')
                     if(wait_timer >= 5 && !question_fetched){
+                        document.cookie = "ErrorRedirected=1; path=/";
                         console.log('Error Notification Reload')
                         location.reload();
                     }
@@ -246,6 +261,7 @@ function notifyQuestion(){
                     console.log('Something other appeared')
                     if(wait_timer >= 3 && !question_fetched){
                         console.log('something other is still appearing.')
+                        document.cookie = "ErrorRedirected=1; path=/";
                         if(!other_notified){
                             // browser.cookies.set({
                             //     url: location.origin,
@@ -254,7 +270,6 @@ function notifyQuestion(){
                             // }).then(function(){
                             //     console.log('ErrorRedirected set to ture')
                             // });
-                            document.cookie = "ErrorRedirected=1; path=/";
                             try{
                                 // alert_sound.pause();
                             }catch{}

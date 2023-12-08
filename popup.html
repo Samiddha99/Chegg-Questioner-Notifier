@@ -7,7 +7,7 @@
         <script src="/scripts/font-awesome/fontawesome-6.4.2.js"></script>
         <style>
             body{
-                width: 350px;
+                width: 400px;
                 padding: 8px;
                 border: 5px solid rgb(251, 114, 16);
             }
@@ -27,6 +27,7 @@
             }
             .qna-link{
                 text-align: center;
+                margin-top: 5px;
             }
             .qna-link a{
                 text-decoration: none;
@@ -84,6 +85,20 @@
             .input-group-text:has(~ .form-control:focus){
                 background-color: #feaf76;
             }
+            .total-question-count .total-question-no{
+                font-size: 25px;
+                color: rgb(4, 172, 4);
+                margin-top: -18px;
+            }
+            .total-question-count .total-question-heading{
+                font-size: 16px;
+                font-weight: bold;
+                color: rgb(1, 132, 47);
+                margin-top: -8px;
+            }
+            .total-question-count .total-question-footer{
+                font-size: 14px;
+            }
         </style>
     </head>
 
@@ -100,13 +115,17 @@
                 </div>
             </div>
             <div class="heading-about">
-                Why will you refresh the page every time to get question in your Chegg live Q&A.
-                <br>Use this extension to get notification when a questions comes in your Chegg Live Expert QnA Dashbord.
+                Use this extension to get notification when a questions comes in your Chegg Live Expert QnA Dashbord.
                 <div class="qna-link">
                     <a href="https://expert.chegg.com/qna/authoring/answer" target="_blank">Go to Chegg Expert Q&A</a>
                 </div>
             </div>
             <hr>
+            <div class="total-question-count text-center mb-2">
+                <div class="total-question-no" id="total_questions">0</div>
+                <div class="total-question-heading">Total Questions Fetched</div>
+                <div class="total-question-footer">Last Fetched: <span id="last_ques_fetched"></span></div>
+            </div>
             <div class="div-form-input mb-3">
                 <div class="input-group mb-0">
                     <span class="input-group-text" id="basic-addon1">Refresh Interval</span>

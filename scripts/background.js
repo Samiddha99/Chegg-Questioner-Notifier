@@ -36,34 +36,40 @@ chrome.runtime.onInstalled.addListener(function(details) {
       
     }
     
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'refreshInterval', 'LastSubmission'], function(result) {
-        if (!result.ExtensionEnabled) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'InactiveAlert', 'refreshInterval', 'LastSubmission', 'TotalQuestions', 'LastQuetionTime'], function(result) {
+        if (result.ExtensionEnabled == undefined || result.ExtensionEnabled == null) {
             chrome.storage.sync.set({ 'ExtensionEnabled': true });
         }
-        if (!result.NotificationEnabled) {
+        if (result.NotificationEnabled == undefined || result.NotificationEnabled == null) {
             chrome.storage.sync.set({ 'NotificationEnabled': true });
         }
-        if (!result.AlertSoundEnabled) {
+        if (result.AlertSoundEnabled == undefined || result.AlertSoundEnabled == null) {
             chrome.storage.sync.set({ 'AlertSoundEnabled': true });
         }
-        if (!result.AlertSoundVolume) {
+        if (result.AlertSoundVolume == undefined || result.AlertSoundVolume == null) {
             chrome.storage.sync.set({ 'AlertSoundVolume': 1 });
         }
-        if (!result.AlertSound) {
+        if (result.AlertSound == undefined || result.AlertSound == null) {
             let sound = {
                 'name': 'audio-1',
                 'url': chrome.runtime.getURL("assets/audio/audio-1.mp3")
             }
             chrome.storage.sync.set({ 'AlertSound': sound });
         }
-        if (!result.refreshInterval) {
+        if (result.refreshInterval == undefined || result.refreshInterval == null) {
             chrome.storage.sync.set({ 'refreshInterval': 30 });
         }
-        if (!result.LastSubmission) {
+        if (result.LastSubmission == undefined || result.LastSubmission == null) {
             chrome.storage.sync.set({ 'LastSubmission': null });
         }
-        if (!result.InactiveAlert) {
+        if (result.InactiveAlert == undefined || result.InactiveAlert == null) {
             chrome.storage.sync.set({ 'InactiveAlert': true });
+        }
+        if(result.TotalQuestions == undefined || result.TotalQuestions == null){
+            chrome.storage.sync.set({ 'TotalQuestions': 0 });
+        }
+        if(result.TotalQuestions == undefined || result.TotalQuestions == null){
+            chrome.storage.sync.set({ 'LastQuetionTime': null });
         }
     });
 });
