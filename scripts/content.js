@@ -87,6 +87,9 @@ function notifyQuestion(){
     var wait_timer = 0;
     var wait_timer1 = 0;
     var reverse_timer = refreshInterval;
+    chrome.storage.sync.get(['LastQuetionTime'], function(result){
+        console.log(result.LastQuetionTime)
+    });
     if(ExtensionEnabled == true){
         console.log(`Chegg Question Notifier is activated. Will refresh page in every ${refreshInterval} seconds`);
         start_interval = setInterval(function(){
@@ -124,7 +127,7 @@ function notifyQuestion(){
                 document.cookie = "ErrorRedirected=0; path=/";
                 try{
                     let start_solving_timer_hr = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="hours"]`)[0].innerHTML);
-                    let start_solving_timer_min = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="minutes"]`)[0].innerHTML);
+                    let start_solving_timer_min = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="mintues"]`)[0].innerHTML);
                     let start_solving_timer_sec = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="seconds"]`)[0].innerHTML);
                     let start_solving_timer = start_solving_timer_hr*3600 + start_solving_timer_min*60 + start_solving_timer_sec;
                     console.log('start_solving_timer', start_solving_timer)
@@ -140,7 +143,7 @@ function notifyQuestion(){
                         timer_sound_played = false;
                         timer_sound.pause();
                     }
-                }catch{
+                }catch(e){
                     timer_sound_played = false;
                     try{
                         timer_sound.pause();
@@ -221,7 +224,7 @@ function notifyQuestion(){
                             }
                             chrome.storage.sync.set({ 'TotalQuestions': TotalQuestions });
                             curr_time = new Date()
-                            chrome.storage.sync.set({ 'LastQuetionTime': curr_time });
+                            chrome.storage.sync.set({ 'LastQuetionTime': `${curr_time}` });
                         });
                     }
                     question_notified = true;
@@ -337,7 +340,7 @@ function stopExtension(reload=false){
 }
 window.addEventListener("load", function(){
     console.log("Chegg Question Notifier is ready as page loaded.");
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'refreshInterval'], function (result) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'refreshInterval', 'LastQuetionTime'], function (result) {
         ExtensionEnabled = result.ExtensionEnabled;
         NotificationEnabled = result.NotificationEnabled;
         AlertSoundEnabled = result.AlertSoundEnabled;

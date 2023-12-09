@@ -74,9 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#extension_enabled-label').html("Enable the Extension");
             $("#extension_enabled-info").html('The extension is disabled.');
         }
-        chrome.storage.sync.set({ 'ExtensionEnabled': ExtensionEnabled }, function() {
-            console.log('Settings saved!');
-        });
+        chrome.storage.sync.set({ 'ExtensionEnabled': ExtensionEnabled });
     });
 
     document.getElementById('notification_enabled').addEventListener('change', function(event){
@@ -90,9 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#notification_enabled-label').html("Enable the Notification");
             $("#notification_enabled-info").html(`You'll not nitified when a question is available in your Chegg Live Expert Q&A.`);
         }
-        chrome.storage.sync.set({ 'NotificationEnabled': NotificationEnabled }, function() {
-            console.log('Settings saved!');
-        });
+        chrome.storage.sync.set({ 'NotificationEnabled': NotificationEnabled });
     });
 
     document.getElementById('alertsound_enabled').addEventListener('change', function(event){
@@ -106,9 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#alertsound_enabled-label').html("Enable the Alert Sound");
             $("#alertsound_enabled-info").html(`No sound will be payed when a question is available in your Chegg Live Expert Q&A.`);
         }
-        chrome.storage.sync.set({ 'AlertSoundEnabled': AlertSoundEnabled }, function() {
-            console.log('Settings saved!');
-        });
+        chrome.storage.sync.set({ 'AlertSoundEnabled': AlertSoundEnabled });
     });
 
     document.getElementById('refresh_interval').addEventListener('change', function(event){
@@ -118,9 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $("#refresh_interval").val(refreshInterval);
         }
         $("#refresh_interval-text").html(refreshInterval);
-        chrome.storage.sync.set({ 'refreshInterval': refreshInterval }, function() {
-            console.log('Settings saved!');
-        });
+        chrome.storage.sync.set({ 'refreshInterval': refreshInterval });
     });
 });
   
