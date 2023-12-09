@@ -130,7 +130,6 @@ function notifyQuestion(){
                     let start_solving_timer_min = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="mintues"]`)[0].innerHTML);
                     let start_solving_timer_sec = Number(document.querySelectorAll(`[data-test="expert-timer"] [data-test="seconds"]`)[0].innerHTML);
                     let start_solving_timer = start_solving_timer_hr*3600 + start_solving_timer_min*60 + start_solving_timer_sec;
-                    console.log('start_solving_timer', start_solving_timer)
                     if(start_solving_timer < 60 && !timer_sound_played){
                         console.log('Less than 1 minute remain.')
                         timer_sound_played = true;
