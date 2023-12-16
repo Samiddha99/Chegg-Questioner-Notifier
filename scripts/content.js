@@ -55,8 +55,12 @@ var RefreshIntervalMax = 60;
 
 // Listen for changes in storage and update
 chrome.storage.onChanged.addListener(function (changes, namespace) {
-    if (changes.RefreshIntervalMin || changes.RefreshIntervalMax) {
+    if(changes.RefreshIntervalMin) {
         RefreshIntervalMin = changes.RefreshIntervalMin.newValue || 30;
+        console.log("Chegg Question Notifier Rr-loaded...");
+        notifyQuestion();
+    }
+    if(changes.RefreshIntervalMax) {
         RefreshIntervalMax = changes.RefreshIntervalMax.newValue || 60;
         console.log("Chegg Question Notifier Rr-loaded...");
         notifyQuestion();
