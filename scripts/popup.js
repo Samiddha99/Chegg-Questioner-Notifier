@@ -21,7 +21,7 @@ function formatDateTime(dateTime)
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'refreshInterval', 'TotalQuestions', 'LastQuetionTime'], function (result) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'RefreshIntervalMin', 'RefreshIntervalMax', 'TotalQuestions', 'LastQuetionTime'], function (result) {
         if (result.ExtensionEnabled == true) {
             $('#extension_enabled').prop('checked', true);
             $('#extension_enabled-label').html("Disable the Extension");
@@ -52,10 +52,14 @@ document.addEventListener('DOMContentLoaded', function() {
             $("#alertsound_enabled-info").html('No sound will be payed when a question is available in your Chegg Live Expert Q&A.');
         }
 
-        if (result.refreshInterval) {
-            $('#refresh_interval').val(result.refreshInterval);
-            $("#refresh_interval-text").html(result.refreshInterval);
+        if (result.RefreshIntervalMin) {
+            $('#refresh_interval_min').val(result.RefreshIntervalMin);
+            $("#refresh_interval_min-text").html(result.RefreshIntervalMin);
         } 
+        if (result.RefreshIntervalMax) {
+            $('#refresh_interval_max').val(result.RefreshIntervalMax);
+            $("#refresh_interval_max-text").html(result.RefreshIntervalMax);
+        }
         
         $("#total_questions").html(result.TotalQuestions);
         LastQuetionTime = formatDateTime(result.LastQuetionTime);
@@ -105,14 +109,23 @@ document.addEventListener('DOMContentLoaded', function() {
         chrome.storage.sync.set({ 'AlertSoundEnabled': AlertSoundEnabled });
     });
 
-    document.getElementById('refresh_interval').addEventListener('change', function(event){
-        let refreshInterval = $(this).val();
-        if(Number(refreshInterval) < 10){
-            refreshInterval = 10;
-            $("#refresh_interval").val(refreshInterval);
+    document.getElementById('refresh_interval_min').addEventListener('change', function(event){
+        let refreshIntervalMin = $(this).val();
+        if(Number(refreshIntervalMin) < 10){
+            refreshIntervalMin = 10;
+            $("#refresh_interval_min").val(refreshIntervalMin);
         }
-        $("#refresh_interval-text").html(refreshInterval);
-        chrome.storage.sync.set({ 'refreshInterval': refreshInterval });
+        $("#refresh_interval_min-text").html(refreshIntervalMin);
+        chrome.storage.sync.set({ 'refreshIntervalMin': refreshIntervalMin });
+    });
+    document.getElementById('refresh_interval_max').addEventListener('change', function(event){
+        let refreshIntervalMax = $(this).val();
+        if(Number(refreshIntervalMax) < 20){
+            refreshIntervalMax = 20;
+            $("#refresh_interval_max").val(refreshIntervalMax);
+        }
+        $("#refresh_interval_max-text").html(refreshIntervalMax);
+        chrome.storage.sync.set({ 'refreshIntervalMax': refreshIntervalMax });
     });
 });
   

@@ -26,7 +26,7 @@ function playAlertSound(){
     }
 }
 window.addEventListener("load", function() {
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'InactiveAlert', 'refreshInterval'], function (result) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'InactiveAlert', 'RefreshIntervalMin', 'RefreshIntervalMax'], function (result) {
         if (result.ExtensionEnabled == true) {
             $('#extension_enabled').prop('checked', true);
             $('#extension_enabled-label').html("Disable the Extension");
@@ -94,9 +94,13 @@ window.addEventListener("load", function() {
             $('#alert_audio_volume').val(1);
         }
 
-        if (result.refreshInterval) {
-            $('#refresh_interval').val(result.refreshInterval);
-            $("#refresh_interval-text").html(result.refreshInterval);
+        if (result.RefreshIntervalMin) {
+            $('#refresh_interval_min').val(result.RefreshIntervalMin);
+            $("#refresh_interval_min-text").html(result.RefreshIntervalMin);
+        }
+        if (result.RefreshIntervalMax) {
+            $('#refresh_interval_max').val(result.RefreshIntervalMax);
+            $("#refresh_interval_max-text").html(result.RefreshIntervalMax);
         } 
     });
     
@@ -167,13 +171,22 @@ window.addEventListener("load", function() {
     });
 
     document.getElementById('refresh_interval-btn').addEventListener('click', function(event){
-        let refreshInterval = $("#refresh_interval").val();
-        if(Number(refreshInterval) < 10){
-            refreshInterval = 10;
-            $("#refresh_interval").val(refreshInterval);
+        let refreshIntervalMin = $("#refresh_interval_min").val();
+        let refreshIntervalMax = $("#refresh_interval_max").val();
+        if(Number(refreshIntervalMin) < 10){
+            refreshIntervalMin = 10;
+            $("#refresh_interval_min").val(refreshIntervalMin);
         }
-        $("#refresh_interval-text").html(refreshInterval);
-        chrome.storage.sync.set({ 'refreshInterval': refreshInterval }, function() {
+        if(Number(refreshIntervalMax) < 20){
+            refreshIntervalMax = 20;
+            $("#refresh_interval_max").val(refreshIntervalMax);
+        }
+        $("#refresh_interval_min-text").html(refreshIntervalMin);
+        $("#refresh_interval_max-text").html(refreshIntervalMax);
+        chrome.storage.sync.set({ 'RefreshIntervalMin': refreshIntervalMin }, function() {
+            console.log('Settings saved!');
+        });
+        chrome.storage.sync.set({ 'RefreshIntervalMax': refreshIntervalMax }, function() {
             console.log('Settings saved!');
         });
     });

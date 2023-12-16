@@ -56,8 +56,11 @@ chrome.runtime.onInstalled.addListener(function(details) {
             }
             chrome.storage.sync.set({ 'AlertSound': sound });
         }
-        if (result.refreshInterval == undefined || result.refreshInterval == null) {
-            chrome.storage.sync.set({ 'refreshInterval': 30 });
+        if (result.RefreshIntervalMin == undefined || result.RefreshIntervalMin == null) {
+            chrome.storage.sync.set({ 'RefreshIntervalMin': 30 });
+        }
+        if (result.RefreshIntervalMax == undefined || result.RefreshIntervalMax == null) {
+            chrome.storage.sync.set({ 'RefreshIntervalMax': 60 });
         }
         if (result.LastSubmission == undefined || result.LastSubmission == null) {
             chrome.storage.sync.set({ 'LastSubmission': null });
@@ -68,7 +71,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
         if(result.TotalQuestions == undefined || result.TotalQuestions == null){
             chrome.storage.sync.set({ 'TotalQuestions': 0 });
         }
-        if(result.TotalQuestions == undefined || result.TotalQuestions == null){
+        if(result.LastQuetionTime == undefined || result.LastQuetionTime == null){
             chrome.storage.sync.set({ 'LastQuetionTime': null });
         }
     });

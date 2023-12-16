@@ -10,6 +10,16 @@
                 padding: 10px;
                 background-color:rgb(255, 203, 166);
             }
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            /* Firefox */
+            input[type=number] {
+                -moz-appearance: textfield;
+                appearance: textfield;
+            }
             .container{
                 width: 100%;
                 max-width: 500px;
@@ -281,11 +291,12 @@
                 <div class="col">
                     <div class="div-form-input mb-3">
                         <div class="input-group mb-0">
-                            <span class="input-group-text" id="basic-addon1">Refresh Interval</span>
-                            <input type="number" min="10" class="form-control" id="refresh_interval" placeholder="In Second" aria-label="refresh" aria-describedby="basic-addon1">
+                            <span class="input-group-text" id="basic-addon1">Refresh In</span>
+                            <input type="number" min="10" class="form-control" id="refresh_interval_min" placeholder="Min In Second">
+                            <input type="number" min="20" class="form-control" id="refresh_interval_max" placeholder="Max In Second">
                             <button class="btn refresh_interval-btn" type="button" id="refresh_interval-btn">Set</button>
                           </div>
-                          <div class="input-info" id="refresh_interval-info">Expert Q&A page will reload at every <span id="refresh_interval-text"></span> seconds to fetch question if available.</div>
+                          <div class="input-info" id="refresh_interval-info">Expert Q&A page will reload at every <span id="refresh_interval_min-text"></span> to <span id="refresh_interval_max-text"></span> seconds to fetch question if available.</div>
                     </div>
                 </div>
                 <div class="col-auto">

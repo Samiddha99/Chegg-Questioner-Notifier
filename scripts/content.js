@@ -2,8 +2,12 @@
 var qna_url = "https://expert.chegg.com/qna/authoring/answer"
 
 function getCookies(name){
-    const cookieValue = document.cookie.split("; ").find((row) => row.startsWith("test2="))?.split("=")[1];
-    return  cookieValue
+    let cookie = {};
+    document.cookie.split(';').forEach(function(el) {
+        let [key,value] = el.split('=');
+        cookie[key.trim()] = value;
+    });
+    return cookie[name];
 }
 function PopIt(event) {
     // Extension 2
@@ -46,12 +50,14 @@ var NotificationEnabled = false;
 var AlertSoundEnabled = false;
 var AlertSound;
 var AlertSoundVolume;
-var refreshInterval = 30;
+var RefreshIntervalMin = 30;
+var RefreshIntervalMax = 60;
 
 // Listen for changes in storage and update
 chrome.storage.onChanged.addListener(function (changes, namespace) {
-    if (changes.refreshInterval) {
-        refreshInterval = changes.refreshInterval.newValue || 30;
+    if (changes.RefreshIntervalMin || changes.RefreshIntervalMax) {
+        RefreshIntervalMin = changes.RefreshIntervalMin.newValue || 30;
+        RefreshIntervalMax = changes.RefreshIntervalMax.newValue || 60;
         console.log("Chegg Question Notifier Rr-loaded...");
         notifyQuestion();
     }
@@ -86,12 +92,28 @@ function notifyQuestion(){
     stopExtension(reload=true);
     var wait_timer = 0;
     var wait_timer1 = 0;
-    var reverse_timer = refreshInterval;
+    min = Math.ceil(RefreshIntervalMin);
+    max = Math.floor(RefreshIntervalMax);
+    var random_number;
+    var prev_random_number = getCookies('prev_random_number');
+    prev_random_number = Number(prev_random_number)
+    if(prev_random_number == undefined || prev_random_number == null || prev_random_number == '' || prev_random_number == NaN){
+        prev_random_number = max
+    }
+    while(true){
+        random_number = Math.floor(Math.random() * (max - min + 1) + min);
+        let random_diff = Math.abs(random_number - prev_random_number);
+        if(random_diff > 5){
+            break;
+        }
+    }
+    document.cookie = `prev_random_number=${random_number}; path=/`;
+    var reverse_timer = random_number;
     chrome.storage.sync.get(['LastQuetionTime'], function(result){
         console.log(result.LastQuetionTime)
     });
     if(ExtensionEnabled == true){
-        console.log(`Chegg Question Notifier is activated. Will refresh page in every ${refreshInterval} seconds`);
+        console.log(`Chegg Question Notifier is activated. Will refresh page in every ${RefreshIntervalMin} to ${RefreshIntervalMax} seconds`);
         start_interval = setInterval(function(){
             let page_contents = String(document.documentElement.innerHTML).toLowerCase();
             let content_loads = document.querySelectorAll(`[data-test="braze-notifications-header-button"]`);
@@ -157,7 +179,7 @@ function notifyQuestion(){
                     try{
                         let msg = `<div id="chegg_questioner_notifier_msg" style="text-align:center;">
                             <h4 style="color:red;">Chegg Question Notifier is Activated.</h4>
-                            <div style="font-size:14px; color:red;">Keep this page open. The page will refresh at every ${refreshInterval} seconds. You will get notification when question is avalibale.</div>
+                            <div style="font-size:14px; color:red;">Keep this page open. The page will refresh at every ${RefreshIntervalMin} to ${RefreshIntervalMax} seconds. You will get notification when question is avalibale.</div>
                             <div style="font-size:14px; color:red;">Refresh in <span id="reverse_timer">${reverse_timer}</span> seconds</div>
                         </div>`;
                         no_question_div[0].insertAdjacentHTML("afterbegin", msg);
@@ -174,7 +196,7 @@ function notifyQuestion(){
                 if(question_div.length >= 1){
                     question_fetched = true;
                     wait_timer = 0;
-                    reverse_timer = refreshInterval;
+                    reverse_timer = random_number;
                     // other_notified = false;
                     if(!question_notified){
                         let title = `HURRAY!\nNew Question in Chegg!`;
@@ -233,7 +255,7 @@ function notifyQuestion(){
                     location.reload();
                 }
                 else if(no_question_div.length >= 1){
-                    if(wait_timer > refreshInterval){
+                    if(wait_timer > random_number){
                         location.reload();
                     }
                 }
@@ -339,13 +361,14 @@ function stopExtension(reload=false){
 }
 window.addEventListener("load", function(){
     console.log("Chegg Question Notifier is ready as page loaded.");
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'refreshInterval', 'LastQuetionTime'], function (result) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'RefreshIntervalMin', 'RefreshIntervalMax', 'LastQuetionTime'], function (result) {
         ExtensionEnabled = result.ExtensionEnabled;
         NotificationEnabled = result.NotificationEnabled;
         AlertSoundEnabled = result.AlertSoundEnabled;
         AlertSound = result.AlertSound['url'];
         AlertSoundVolume = result.AlertSoundVolume;
-        refreshInterval = result.refreshInterval || 30;
+        RefreshIntervalMin = result.RefreshIntervalMin || 30;
+        RefreshIntervalMax = result.RefreshIntervalMax || 60;
         console.log(`URL ${location.href} loaded fully.`);
         console.log(result)
         console.log("Data for Chegg Question Notifier is read from storage.");

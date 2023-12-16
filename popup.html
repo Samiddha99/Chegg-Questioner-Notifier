@@ -11,6 +11,16 @@
                 padding: 8px;
                 border: 5px solid rgb(251, 114, 16);
             }
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            /* Firefox */
+            input[type=number] {
+                -moz-appearance: textfield;
+                appearance: textfield;
+            }
             .container{
                 background-color: white;
                 border: 3px dashed #fd8128;
@@ -128,11 +138,12 @@
             </div>
             <div class="div-form-input mb-3">
                 <div class="input-group mb-0">
-                    <span class="input-group-text" id="basic-addon1">Refresh Interval</span>
-                    <input type="number" min="10" class="form-control" id="refresh_interval" placeholder="In Second" aria-label="refresh" aria-describedby="basic-addon1">
+                    <span class="input-group-text" id="basic-addon1">Refresh In</span>
+                    <input type="number" min="10" class="form-control" id="refresh_interval_min" placeholder="Min In Second">
+                    <input type="number" min="20" class="form-control" id="refresh_interval_max" placeholder="Max In Second">
                     <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon1">Set</button> -->
-                  </div>
-                  <div class="input-info" id="refresh_interval-info">Expert Q&A page will reload at every <span id="refresh_interval-text"></span> seconds to fetch question if available.</div>
+                </div>
+                <div class="input-info" id="refresh_interval-info">Expert Q&A page will reload at every <span id="refresh_interval_min-text"></span> to <span id="refresh_interval_max-text"></span> seconds to fetch question if available.</div>
             </div>
             <div class="div-form-switch">
                 <div class="form-check form-switch">
