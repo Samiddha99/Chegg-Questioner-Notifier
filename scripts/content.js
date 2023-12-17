@@ -210,7 +210,7 @@ function notifyQuestion(){
                         }
                         catch{}
                         try{
-                            sent_notification.close();
+                            // sent_notification.close();
                         }
                         catch{}
                         if(AlertSoundEnabled){
@@ -302,7 +302,7 @@ function notifyQuestion(){
                                 // alert_sound.pause();
                             }catch{}
                             try{
-                                sent_notification.close();
+                                // sent_notification.close();
                             }catch{}
                             try{
                                 audio_file = chrome.runtime.getURL("assets/audio/other_notification.mp3")
