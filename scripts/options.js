@@ -173,22 +173,38 @@ window.addEventListener("load", function() {
     document.getElementById('refresh_interval-btn').addEventListener('click', function(event){
         let refreshIntervalMin = $("#refresh_interval_min").val();
         let refreshIntervalMax = $("#refresh_interval_max").val();
-        if(Number(refreshIntervalMin) < 10){
-            refreshIntervalMin = 10;
+        let min_min_val = Number($('#refresh_interval_min').attr('min'));
+        let min_max_val = Number($('#refresh_interval_max').attr('min'));
+
+        if(Number(refreshIntervalMin) < min_min_val){
+            refreshIntervalMin = min_min_val;
             $("#refresh_interval_min").val(refreshIntervalMin);
         }
-        if(Number(refreshIntervalMax) < 20){
-            refreshIntervalMax = 20;
+        if(Number(refreshIntervalMax) < min_max_val){
+            refreshIntervalMax = min_max_val;
             $("#refresh_interval_max").val(refreshIntervalMax);
         }
-        $("#refresh_interval_min-text").html(refreshIntervalMin);
-        $("#refresh_interval_max-text").html(refreshIntervalMax);
-        chrome.storage.sync.set({ 'RefreshIntervalMin': refreshIntervalMin }, function() {
-            console.log('Settings saved!');
-        });
-        chrome.storage.sync.set({ 'RefreshIntervalMax': refreshIntervalMax }, function() {
-            console.log('Settings saved!');
-        });
+
+        if(refreshIntervalMin > refreshIntervalMax){
+            alert(`Minimum Refresh Interval can't be greater than Maximum Refresh Interval`);
+        }
+        else if(refreshIntervalMax - refreshIntervalMin < 10){
+            alert(`Difference between Minimum Refresh Interval and Maximum Refresh Interval must be greater than or equal to 10`);
+        }
+        else{
+            if(refreshIntervalMin != '' && refreshIntervalMin != undefined && refreshIntervalMin != null){
+                $("#refresh_interval_min-text").html(refreshIntervalMin);
+                chrome.storage.sync.set({ 'RefreshIntervalMin': refreshIntervalMin }, function() {
+                    console.log('Settings saved!');
+                });
+            }
+            if(refreshIntervalMax != '' && refreshIntervalMax != undefined && refreshIntervalMax != null){
+                $("#refresh_interval_max-text").html(refreshIntervalMax);
+                chrome.storage.sync.set({ 'RefreshIntervalMax': refreshIntervalMax }, function() {
+                    console.log('Settings saved!');
+                });
+            }
+        }
     });
 
     $('.alert_sound-dropdown-item').on('click', function(event){

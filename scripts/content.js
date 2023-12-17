@@ -99,14 +99,15 @@ function notifyQuestion(){
     min = Math.ceil(RefreshIntervalMin);
     max = Math.floor(RefreshIntervalMax);
     var random_number;
+    var random_diff;
     var prev_random_number = getCookies('prev_random_number');
-    prev_random_number = Number(prev_random_number)
-    if(prev_random_number == undefined || prev_random_number == null || prev_random_number == '' || prev_random_number == NaN){
-        prev_random_number = max
+    if(prev_random_number == undefined){
+        prev_random_number = 0
     }
+    prev_random_number = Number(prev_random_number)
     while(true){
         random_number = Math.floor(Math.random() * (max - min + 1) + min);
-        let random_diff = Math.abs(random_number - prev_random_number);
+        random_diff = Math.abs(random_number - prev_random_number);
         if(random_diff > 5){
             break;
         }
