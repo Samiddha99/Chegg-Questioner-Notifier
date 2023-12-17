@@ -36,7 +36,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
       
     }
     
-    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'InactiveAlert', 'refreshInterval', 'LastSubmission', 'TotalQuestions', 'LastQuetionTime'], function(result) {
+    chrome.storage.sync.get(['ExtensionEnabled', 'NotificationEnabled', 'AlertSoundEnabled', 'AlertSound', 'AlertSoundVolume', 'InactiveAlert', 'RefreshIntervalMin', 'RefreshIntervalMax', 'LastSubmission', 'TotalQuestions', 'LastQuetionTime'], function(result) {
         if (result.ExtensionEnabled == undefined || result.ExtensionEnabled == null) {
             chrome.storage.sync.set({ 'ExtensionEnabled': true });
         }

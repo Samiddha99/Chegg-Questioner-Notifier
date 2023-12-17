@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         else if(refreshIntervalMin != '' && refreshIntervalMin != undefined && refreshIntervalMin != null){
             $("#refresh_interval_min-text").html(refreshIntervalMin);
-            chrome.storage.sync.set({ 'refreshIntervalMin': refreshIntervalMin });
+            chrome.storage.sync.set({ 'RefreshIntervalMin': refreshIntervalMin });
         }
     });
     document.getElementById('refresh_interval_max').addEventListener('change', function(event){
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         else if(refreshIntervalMax != '' && refreshIntervalMax != undefined && refreshIntervalMax != null){
             $("#refresh_interval_max-text").html(refreshIntervalMax);
-            chrome.storage.sync.set({ 'refreshIntervalMax': refreshIntervalMax });
+            chrome.storage.sync.set({ 'RefreshIntervalMax': refreshIntervalMax });
         }
     });
 });
