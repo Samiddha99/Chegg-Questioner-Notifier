@@ -105,18 +105,16 @@ function notifyQuestion(){
         prev_random_number = 0
     }
     prev_random_number = Number(prev_random_number)
-    while(true){
-        random_number = Math.floor(Math.random() * (max - min + 1) + min);
-        random_diff = Math.abs(random_number - prev_random_number);
-        if(random_diff > 5){
-            break;
-        }
-    }
+    random_number = Math.floor(Math.random() * (max - min + 1) + min);
+    // while(true){
+    //     random_number = Math.floor(Math.random() * (max - min + 1) + min);
+    //     random_diff = Math.abs(random_number - prev_random_number);
+    //     if(random_diff > 5){
+    //         break;
+    //     }
+    // }
     document.cookie = `prev_random_number=${random_number}; path=/`;
     var reverse_timer = random_number;
-    chrome.storage.sync.get(['LastQuetionTime'], function(result){
-        console.log(result.LastQuetionTime)
-    });
     if(ExtensionEnabled == true){
         console.log(`Chegg Question Notifier is activated. Will refresh page in every ${RefreshIntervalMin} to ${RefreshIntervalMax} seconds`);
         start_interval = setInterval(function(){
@@ -288,7 +286,7 @@ function notifyQuestion(){
                 }
                 else{
                     console.log('Something other appeared')
-                    if(wait_timer >= 3 && !question_fetched){
+                    if(wait_timer >= 10 && !question_fetched){
                         console.log('something other is still appearing.')
                         document.cookie = "ErrorRedirected=1; path=/";
                         if(!other_notified){
